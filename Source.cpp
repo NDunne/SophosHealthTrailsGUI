@@ -5,19 +5,14 @@ using std::string;
 
 HealthEvent* createFromString(std::string s)
 {	
-
-	std::cout << s << " " << s.substr(s.length() - 5);
-	if (s.substr(s.length() - 5) == ".json")
 		return (new HealthEvent(s));
-	else
-		throw;
 }
 
 vector<HealthEvent*> readFile(std::string path, vector<HealthEvent*> eventList)
 {
 	std::ifstream f;
 	f.open(path, std::ifstream::in);
-	std::cout << path << "\n";
+	//std::cout << path << "\n";
 
 	if (f.fail())
 	{
@@ -25,8 +20,8 @@ vector<HealthEvent*> readFile(std::string path, vector<HealthEvent*> eventList)
 	}
 
 	std::string s((istreambuf_iterator<char>(f.rdbuf())),istreambuf_iterator<char>());
-	
-	eventList.push_back(createFromString(s));
+	if (path.substr(path.length() - 5) == ".json")
+		eventList.push_back(createFromString(s));
 
 	f.close();
 
