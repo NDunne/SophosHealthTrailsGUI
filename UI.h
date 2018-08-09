@@ -55,6 +55,12 @@ namespace HealthTrail {
 	private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  configToolStripMenuItem;
 
+	private: System::Windows::Forms::ComboBox^  comboBox3;
+	private: System::Windows::Forms::Button^  Submit;
+	private: System::Windows::Forms::ComboBox^  comboBox2;
+	private: System::Windows::Forms::ComboBox^  comboBox1;
+
+
 
 
 
@@ -86,14 +92,18 @@ namespace HealthTrail {
 		{
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->splitContainer1 = (gcnew System::Windows::Forms::SplitContainer());
-			this->treeView1 = (gcnew System::Windows::Forms::TreeView());
-			this->webBrowser1 = (gcnew System::Windows::Forms::WebBrowser());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->refreshToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->configToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->splitContainer1 = (gcnew System::Windows::Forms::SplitContainer());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->treeView1 = (gcnew System::Windows::Forms::TreeView());
+			this->webBrowser1 = (gcnew System::Windows::Forms::WebBrowser());
+			this->comboBox3 = (gcnew System::Windows::Forms::ComboBox());
+			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
+			this->comboBox2 = (gcnew System::Windows::Forms::ComboBox());
+			this->Submit = (gcnew System::Windows::Forms::Button());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer1))->BeginInit();
 			this->splitContainer1->Panel1->SuspendLayout();
@@ -123,6 +133,24 @@ namespace HealthTrail {
 			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
 			this->fileToolStripMenuItem->Text = L"File";
 			// 
+			// refreshToolStripMenuItem
+			// 
+			this->refreshToolStripMenuItem->Name = L"refreshToolStripMenuItem";
+			this->refreshToolStripMenuItem->Size = System::Drawing::Size(113, 22);
+			this->refreshToolStripMenuItem->Text = L"Refresh";
+			// 
+			// exitToolStripMenuItem
+			// 
+			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(113, 22);
+			this->exitToolStripMenuItem->Text = L"Exit";
+			// 
+			// configToolStripMenuItem
+			// 
+			this->configToolStripMenuItem->Name = L"configToolStripMenuItem";
+			this->configToolStripMenuItem->Size = System::Drawing::Size(55, 20);
+			this->configToolStripMenuItem->Text = L"Config";
+			// 
 			// helpToolStripMenuItem
 			// 
 			this->helpToolStripMenuItem->Name = L"helpToolStripMenuItem";
@@ -137,6 +165,10 @@ namespace HealthTrail {
 			// 
 			// splitContainer1.Panel1
 			// 
+			this->splitContainer1->Panel1->Controls->Add(this->Submit);
+			this->splitContainer1->Panel1->Controls->Add(this->comboBox2);
+			this->splitContainer1->Panel1->Controls->Add(this->comboBox1);
+			this->splitContainer1->Panel1->Controls->Add(this->comboBox3);
 			this->splitContainer1->Panel1->Controls->Add(this->textBox1);
 			this->splitContainer1->Panel1->Controls->Add(this->treeView1);
 			// 
@@ -147,13 +179,22 @@ namespace HealthTrail {
 			this->splitContainer1->SplitterDistance = 356;
 			this->splitContainer1->TabIndex = 1;
 			// 
+			// textBox1
+			// 
+			this->textBox1->Dock = System::Windows::Forms::DockStyle::Bottom;
+			this->textBox1->Location = System::Drawing::Point(0, 455);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(356, 20);
+			this->textBox1->TabIndex = 1;
+			// 
 			// treeView1
 			// 
-			this->treeView1->Dock = System::Windows::Forms::DockStyle::Top;
+			this->treeView1->Font = (gcnew System::Drawing::Font(L"Consolas", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->treeView1->HotTracking = true;
-			this->treeView1->Location = System::Drawing::Point(0, 0);
+			this->treeView1->Location = System::Drawing::Point(0, 26);
 			this->treeView1->Name = L"treeView1";
-			this->treeView1->Size = System::Drawing::Size(356, 450);
+			this->treeView1->Size = System::Drawing::Size(356, 424);
 			this->treeView1->TabIndex = 0;
 			// 
 			// webBrowser1
@@ -165,31 +206,48 @@ namespace HealthTrail {
 			this->webBrowser1->Size = System::Drawing::Size(710, 475);
 			this->webBrowser1->TabIndex = 0;
 			// 
-			// textBox1
+			// comboBox3
 			// 
-			this->textBox1->Dock = System::Windows::Forms::DockStyle::Bottom;
-			this->textBox1->Location = System::Drawing::Point(0, 455);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(356, 20);
-			this->textBox1->TabIndex = 1;
+			this->comboBox3->Font = (gcnew System::Drawing::Font(L"Consolas", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->comboBox3->FormattingEnabled = true;
+			this->comboBox3->Location = System::Drawing::Point(0, 0);
+			this->comboBox3->Margin = System::Windows::Forms::Padding(3, 3, 0, 3);
+			this->comboBox3->Name = L"comboBox3";
+			this->comboBox3->Size = System::Drawing::Size(101, 23);
+			this->comboBox3->TabIndex = 4;
 			// 
-			// refreshToolStripMenuItem
+			// comboBox1
 			// 
-			this->refreshToolStripMenuItem->Name = L"refreshToolStripMenuItem";
-			this->refreshToolStripMenuItem->Size = System::Drawing::Size(152, 22);
-			this->refreshToolStripMenuItem->Text = L"Refresh";
+			this->comboBox1->Font = (gcnew System::Drawing::Font(L"Consolas", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->comboBox1->FormattingEnabled = true;
+			this->comboBox1->Location = System::Drawing::Point(101, 0);
+			this->comboBox1->Margin = System::Windows::Forms::Padding(0, 3, 0, 3);
+			this->comboBox1->Name = L"comboBox1";
+			this->comboBox1->Size = System::Drawing::Size(101, 23);
+			this->comboBox1->TabIndex = 5;
 			// 
-			// exitToolStripMenuItem
+			// comboBox2
 			// 
-			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(152, 22);
-			this->exitToolStripMenuItem->Text = L"Exit";
+			this->comboBox2->Font = (gcnew System::Drawing::Font(L"Consolas", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->comboBox2->FormattingEnabled = true;
+			this->comboBox2->Location = System::Drawing::Point(202, 0);
+			this->comboBox2->Margin = System::Windows::Forms::Padding(0, 3, 0, 3);
+			this->comboBox2->Name = L"comboBox2";
+			this->comboBox2->Size = System::Drawing::Size(101, 23);
+			this->comboBox2->TabIndex = 6;
 			// 
-			// configToolStripMenuItem
+			// Submit
 			// 
-			this->configToolStripMenuItem->Name = L"configToolStripMenuItem";
-			this->configToolStripMenuItem->Size = System::Drawing::Size(55, 20);
-			this->configToolStripMenuItem->Text = L"Config";
+			this->Submit->Location = System::Drawing::Point(303, 0);
+			this->Submit->Margin = System::Windows::Forms::Padding(0);
+			this->Submit->Name = L"Submit";
+			this->Submit->Size = System::Drawing::Size(54, 23);
+			this->Submit->TabIndex = 7;
+			this->Submit->Text = L"Filter";
+			this->Submit->UseVisualStyleBackColor = true;
 			// 
 			// UI
 			// 
@@ -227,6 +285,8 @@ private: System::Void tabPage1_Click(System::Object^  sender, System::EventArgs^
 private: System::Void UI_Load(System::Object^  sender, System::EventArgs^  e) {
 }
 private: System::Void label1_Click(System::Object^  sender, System::EventArgs^  e) {
+}
+private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
 }
 };
 }

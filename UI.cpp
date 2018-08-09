@@ -5,7 +5,14 @@ using namespace System::Windows::Forms;
 
 string fancyDate(string date)
 {
-
+	string buff{ "" };
+	for (auto n : date)
+	{
+		if (n == '-') buff += '/';
+		else if (n == 'T' || n == 'Z') buff += "   ";
+		else buff += n;
+	}
+	return buff;
 }
 
 String^ convert(string in)
@@ -25,7 +32,7 @@ void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView ^ tv1)
 	for (std::vector<HealthEvent*>::iterator it = trail.begin(); it != trail.end(); it++)
 	{
 
-		TreeNode^ newNode = gcnew TreeNode(convert((*it)->getFirstValue("timeStamp")) + " - " + convert((*it)->getFirstValue("app")));
+		TreeNode^ newNode = gcnew TreeNode(convert(fancyDate((*it)->getFirstValue("timeStamp"))) + " - " + convert((*it)->getFirstValue("app")));
 
 		tv1->Nodes->Add(newNode);
 
