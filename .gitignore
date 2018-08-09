@@ -1,7 +1,8 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
+﻿*
 
-/.vs/HealthTrail/v15/.suo
-/.vs/HealthTrail/v15/Browse.VC.db
-/.vs/HealthTrail/v15/Browse.VC.opendb
+!*.cpp
+!*.h
+!*HealthTrailsProj.exe
+!*HealthTrailsProj.pdb
+
+!*/
