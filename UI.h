@@ -273,10 +273,10 @@ namespace HealthTrail {
 
 		}
 #pragma endregion
-	private: System::Void splitter1_SplitterMoved(System::Object^  sender, System::Windows::Forms::SplitterEventArgs^  e) {
-	}
-	private: System::Void treeView1_AfterSelect(System::Object^  sender, System::Windows::Forms::TreeViewEventArgs^  e) {
-	}
+private: System::Void splitter1_SplitterMoved(System::Object^  sender, System::Windows::Forms::SplitterEventArgs^  e) {
+}
+private: System::Void treeView1_AfterSelect(System::Object^  sender, System::Windows::Forms::TreeViewEventArgs^  e) {
+}
 private: System::Void textBox1_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 }
 private: System::Void textBox1_TextChanged_1(System::Object^  sender, System::EventArgs^  e) {

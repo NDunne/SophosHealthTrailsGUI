@@ -3,20 +3,22 @@
 using std::vector;
 using std::string;
 
+int rec = 0;
+
 //Merge sorted lists by map field
-vector<HealthEvent*>* Merge(vector<HealthEvent*>* A, vector<HealthEvent*>* B, string field)
+vector<HealthEvent*> Merge(vector<HealthEvent*> A, vector<HealthEvent*> B, string field)
 {
-	vector<HealthEvent*>::iterator ItA = (*A).begin();
-	vector<HealthEvent*>::iterator ItB = (*B).begin();
+	vector<HealthEvent*>::iterator ItA = A.begin();
+	vector<HealthEvent*>::iterator ItB = B.begin();
 
 	vector<HealthEvent*> result;
 
-	while (ItA != (*A).end() && ItB != (*B).end())
+	while (ItA != A.end() && ItB != B.end())
 	{
 		string Aval = (*ItA)->getFirstValue(field);
 		string Bval = (*ItB)->getFirstValue(field);
 
-		if (Aval < Bval)
+		if (Aval > Bval)
 		{
 			result.push_back(*ItA);
 			ItA++;
@@ -29,13 +31,13 @@ vector<HealthEvent*>* Merge(vector<HealthEvent*>* A, vector<HealthEvent*>* B, st
 		}
 	}
 	
-	while (ItA != (*A).end())
+	while (ItA != A.end())
 	{
 		result.push_back(*ItA);
 		ItA++;
 	}
 
-	while (ItB != (*B).end())
+	while (ItB != B.end())
 	{
 		result.push_back(*ItB);
 		ItB++;
@@ -43,23 +45,26 @@ vector<HealthEvent*>* Merge(vector<HealthEvent*>* A, vector<HealthEvent*>* B, st
 
 	OutputDebugString("Merged");
 
-	return &result;
+	return result;
 }
 
 //Standard merge sort by map key "field" - alphanumeric for now
-vector<HealthEvent*>* MergeSort(vector<HealthEvent*>* arr, string field)
+vector<HealthEvent*> MergeSort(vector<HealthEvent*> arr, string field)
 {
+	rec++;
+	OutputDebugString("COUNT:");
+	OutputDebugString(to_string(rec).c_str());
+
 	OutputDebugString("MERGE SORTING ");
-	OutputDebugString(to_string(arr->size()).c_str());
+	OutputDebugString(to_string(arr.size()).c_str());
 
-	if (arr->size() < 2) return arr; //Single or zero return
+	if (arr.size() < 2) return arr; //Single or zero return
 
-	OutputDebugString(" - Size > 1");
+	int mid = arr.size() / 2;
 
-	int mid = arr->size() / 2;
+	vector<HealthEvent*> left(arr.begin(), arr.begin() + mid);
+	vector<HealthEvent*> right(arr.begin() + mid, arr.end());	//merge half each
+	
+	return Merge(MergeSort(left, field), MergeSort(right,field),field);
 
-	vector<HealthEvent*> left(arr->begin(), arr->begin() + mid);
-	vector<HealthEvent*> right(arr->begin() + mid, arr->end());	//merge half each
-
-	return Merge(MergeSort(&left, field), MergeSort(&right,field),field);
 }

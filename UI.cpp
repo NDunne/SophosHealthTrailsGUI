@@ -37,15 +37,17 @@ void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView ^ tv1)
 	/*vector<HealthEvent*> trail = ::readFromFolder("C:/Users/Nathan/Desktop/TestJson");*/ 
 	
 	//Work
-	/*vector<HealthEvent*> trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson");*/
+	//vector<HealthEvent*> trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson");
 
 	cout << "refreshed\n";
 
 	tv1->BeginUpdate();
 
 	OutputDebugString("SORTING");
-	
-	trail = *(MergeSort(&trail, "timeStamp"));
+	OutputDebugString(to_string(trail.size()).c_str());
+	OutputDebugString("\n");
+
+	trail = MergeSort(trail, "timeStamp");
 
 	OutputDebugString(" - SORTED");
 
