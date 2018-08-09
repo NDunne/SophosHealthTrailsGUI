@@ -7,6 +7,7 @@
 #include <fstream>
 #include <stdio.h>
 #include <map>
+#include <algorithm>
 
 using namespace std;
 
@@ -71,19 +72,14 @@ public:
 		setFromString(s);
 	}
 
-	string getFirstValue(string k)
+	string getFirstValue(string k) const
 	{
-		return values[k][0];
+		return values.at(k)[0];
 	}
 
 	vector<string> getValues(string k)
 	{
 		return values[k];
-	}
-
-	void setValue(string k, vector<string> v)
-	{
-		values[k] = v;
 	}
 
 	void setFromString(string s)
@@ -102,8 +98,8 @@ public:
 		}
 		//cout << "\n";
 	}
-};
 
+};
 vector<HealthEvent*> readFromFolder(string folder);
 
 vector<HealthEvent*> readFile(std::string path, vector<HealthEvent*> eventList);

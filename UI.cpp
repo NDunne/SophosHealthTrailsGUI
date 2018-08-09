@@ -21,7 +21,7 @@ string fancyDate(string date)
 	return buff;
 }
 
-String^ convert(string in)
+String^ manageString(std::string in)
 {
 	return gcnew String(in.c_str());
 }
@@ -42,32 +42,34 @@ void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView ^ tv1)
 	cout << "refreshed\n";
 
 	tv1->BeginUpdate();
+
+	OutputDebugString("SORTING");
+	
+	trail = *(MergeSort(&trail, "timeStamp"));
+
+	OutputDebugString(" - SORTED");
+
 	for (std::vector<HealthEvent*>::iterator it = trail.begin(); it != trail.end(); it++)
 	{
 
-		TreeNode^ newNode = gcnew TreeNode(convert(fancyDate((*it)->getFirstValue("timeStamp"))));
+		TreeNode^ newNode = gcnew TreeNode(manageString(fancyDate((*it)->getFirstValue("timeStamp"))));
 
 		tv1->Nodes->Add(newNode);
 
-		cout << "added\n";
 	}
 	tv1->EndUpdate();
 
-	cout << "updated\n";
 	/*::Cursor::Current = Cursors::Default;*/
 }
 
 [STAThreadAttribute]
 int main()
 {
-	cout << "Main\n";
 
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
 
 	HealthTrail::UI ui;
-
-	cout << "Running\n";
 
 	Application::Run(%ui);
 
