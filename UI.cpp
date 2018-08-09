@@ -43,13 +43,7 @@ void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView ^ tv1)
 
 	tv1->BeginUpdate();
 
-	OutputDebugString("SORTING");
-	OutputDebugString(to_string(trail.size()).c_str());
-	OutputDebugString("\n");
-
 	trail = MergeSort(trail, "timeStamp");
-
-	OutputDebugString(" - SORTED");
 
 	for (std::vector<HealthEvent*>::iterator it = trail.begin(); it != trail.end(); it++)
 	{
@@ -60,7 +54,6 @@ void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView ^ tv1)
 
 	}
 	tv1->EndUpdate();
-
 	/*::Cursor::Current = Cursors::Default;*/
 }
 

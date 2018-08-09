@@ -15,7 +15,7 @@ namespace HealthTrail {
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// Summary for MyForm
+	/// Main Body UI form
 	/// </summary>
 	public ref class UI : public System::Windows::Forms::Form
 	{
@@ -42,41 +42,24 @@ namespace HealthTrail {
 			}
 		}
 	private: System::Windows::Forms::MenuStrip^  menuStrip1;
-	protected:
 	private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  helpToolStripMenuItem;
-	private: System::Windows::Forms::SplitContainer^  splitContainer1;
-	public: System::Windows::Forms::TreeView^  treeView1;
-	private:
-
-
-	private: System::Windows::Forms::TextBox^  textBox1;
-	private: System::Windows::Forms::WebBrowser^  webBrowser1;
 	private: System::Windows::Forms::ToolStripMenuItem^  refreshToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  configToolStripMenuItem;
 
-	private: System::Windows::Forms::ComboBox^  comboBox3;
+	private: System::Windows::Forms::ToolStripMenuItem^  configToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  helpToolStripMenuItem;
+
+	private: System::Windows::Forms::SplitContainer^  splitContainer1;
+	public: System::Windows::Forms::TreeView^  treeView1;
+	private: System::Windows::Forms::TextBox^  textBox1;
+	private: System::Windows::Forms::WebBrowser^  webBrowser1;
+
 	private: System::Windows::Forms::Button^  Submit;
+	private: System::Windows::Forms::ComboBox^  comboBox3;
 	private: System::Windows::Forms::ComboBox^  comboBox2;
 	private: System::Windows::Forms::ComboBox^  comboBox1;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	protected:
-
 
 	private:
 		/// <summary>
@@ -128,7 +111,7 @@ namespace HealthTrail {
 			//
 			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
 				this->refreshToolStripMenuItem,
-					this->exitToolStripMenuItem
+				this->exitToolStripMenuItem
 			});
 			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
 			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
@@ -207,17 +190,6 @@ namespace HealthTrail {
 			this->webBrowser1->Size = System::Drawing::Size(710, 475);
 			this->webBrowser1->TabIndex = 0;
 			//
-			// comboBox3
-			//
-			this->comboBox3->Font = (gcnew System::Drawing::Font(L"Consolas", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->comboBox3->FormattingEnabled = true;
-			this->comboBox3->Location = System::Drawing::Point(0, 0);
-			this->comboBox3->Margin = System::Windows::Forms::Padding(3, 3, 0, 3);
-			this->comboBox3->Name = L"comboBox3";
-			this->comboBox3->Size = System::Drawing::Size(101, 23);
-			this->comboBox3->TabIndex = 4;
-			//
 			// comboBox1
 			//
 			this->comboBox1->Font = (gcnew System::Drawing::Font(L"Consolas", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
@@ -240,6 +212,17 @@ namespace HealthTrail {
 			this->comboBox2->Size = System::Drawing::Size(101, 23);
 			this->comboBox2->TabIndex = 6;
 			//
+			// comboBox3
+			//
+			this->comboBox3->Font = (gcnew System::Drawing::Font(L"Consolas", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->comboBox3->FormattingEnabled = true;
+			this->comboBox3->Location = System::Drawing::Point(0, 0);
+			this->comboBox3->Margin = System::Windows::Forms::Padding(3, 3, 0, 3);
+			this->comboBox3->Name = L"comboBox3";
+			this->comboBox3->Size = System::Drawing::Size(101, 23);
+			this->comboBox3->TabIndex = 4;
+			//
 			// Submit
 			//
 			this->Submit->Location = System::Drawing::Point(303, 0);
@@ -249,6 +232,7 @@ namespace HealthTrail {
 			this->Submit->TabIndex = 7;
 			this->Submit->Text = L"Filter";
 			this->Submit->UseVisualStyleBackColor = true;
+			this->Submit->Click += gcnew System::EventHandler(this, &UI::FilterButtonClick);
 			//
 			// UI
 			//
@@ -272,22 +256,29 @@ namespace HealthTrail {
 			this->PerformLayout();
 
 		}
-#pragma endregion
-private: System::Void splitter1_SplitterMoved(System::Object^  sender, System::Windows::Forms::SplitterEventArgs^  e) {
-}
-private: System::Void treeView1_AfterSelect(System::Object^  sender, System::Windows::Forms::TreeViewEventArgs^  e) {
-}
-private: System::Void textBox1_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-}
-private: System::Void textBox1_TextChanged_1(System::Object^  sender, System::EventArgs^  e) {
-}
-private: System::Void tabPage1_Click(System::Object^  sender, System::EventArgs^  e) {
-}
-private: System::Void UI_Load(System::Object^  sender, System::EventArgs^  e) {
-}
-private: System::Void label1_Click(System::Object^  sender, System::EventArgs^  e) {
-}
-private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
-}
-};
+		#pragma endregion
+
+		private: void FilterButtonClick(Object^ sender, EventArgs^ e) {
+			MessageBox::Show("CLICKED");
+		}
+
+		private: System::Void splitter1_SplitterMoved(System::Object^  sender, System::Windows::Forms::SplitterEventArgs^  e) {
+		}
+
+		private: System::Void treeView1_AfterSelect(System::Object^  sender, System::Windows::Forms::TreeViewEventArgs^  e) {
+				 }
+
+		private: System::Void textBox1_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+		}
+		private: System::Void textBox1_TextChanged_1(System::Object^  sender, System::EventArgs^  e) {
+		}
+		private: System::Void tabPage1_Click(System::Object^  sender, System::EventArgs^  e) {
+		}
+		private: System::Void UI_Load(System::Object^  sender, System::EventArgs^  e) {
+		}
+		private: System::Void label1_Click(System::Object^  sender, System::EventArgs^  e) {
+		}
+		private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
+		}
+	};
 }
