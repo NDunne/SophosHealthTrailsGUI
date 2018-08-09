@@ -4,20 +4,15 @@ using std::vector;
 using std::string;
 
 HealthEvent* createFromString(std::string s)
-{	
-
-	std::cout << s << " " << s.substr(s.length() - 5);
-	if (s.substr(s.length() - 5) == ".json")
+{
 		return (new HealthEvent(s));
-	else
-		throw;
 }
 
 vector<HealthEvent*> readFile(std::string path, vector<HealthEvent*> eventList)
 {
 	std::ifstream f;
 	f.open(path, std::ifstream::in);
-	std::cout << path << "\n";
+	//std::cout << path << "\n";
 
 	if (f.fail())
 	{
@@ -25,8 +20,8 @@ vector<HealthEvent*> readFile(std::string path, vector<HealthEvent*> eventList)
 	}
 
 	std::string s((istreambuf_iterator<char>(f.rdbuf())),istreambuf_iterator<char>());
-	
-	eventList.push_back(createFromString(s));
+	if (path.substr(path.length() - 5) == ".json")
+		eventList.push_back(createFromString(s));
 
 	f.close();
 
@@ -41,11 +36,11 @@ vector<HealthEvent*> readFromFolder(string folder)
 	HANDLE hFind = ::FindFirstFile(search_path.c_str(), &fd);
 
 	vector<HealthEvent*> eventList;
-	
+
 	if (hFind != INVALID_HANDLE_VALUE) {
 		do {
 			// read all (real) files in current folder
-			if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) 
+			if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
 				char* filename = fd.cFileName;
 				std::string path = folder + "/" + filename; //full path passed to Object creator

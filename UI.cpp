@@ -3,43 +3,60 @@
 using namespace System;
 using namespace System::Windows::Forms;
 
+string fancyDate(string date)
+{
+	string buff{ "" };
+	for (auto n : date)
+	{
+		if (n == '-') buff += '/';
+		else if (n == 'T' || n == 'Z') buff += "   ";
+		else buff += n;
+	}
+	return buff;
+}
+
+String^ convert(string in)
+{
+	return gcnew String(in.c_str());
+}
 
 void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView ^ tv1)
 {
 	//::Cursor::Current = gcnew System::Windows::Forms::Cursor("MyWait.cur");
-	
-	vector<HealthEvent*> trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson");
-	
-	cout << "refreshed";
 
+	vector<HealthEvent*> trail = ::readFromFolder("C:/Users/Nathan/Desktop/TestJson");
+
+	cout << "refreshed\n";
+
+	tv1->BeginUpdate();
 	for (std::vector<HealthEvent*>::iterator it = trail.begin(); it != trail.end(); it++)
 	{
-		TreeNode^ newNode = gcnew TreeNode(gcnew String((*it)->getFirstValue("timeStamp").c_str()));
 
-		tv1->BeginUpdate();
+		TreeNode^ newNode = gcnew TreeNode(convert(fancyDate((*it)->getFirstValue("timeStamp"))) + " - " + convert((*it)->getFirstValue("app")));
+
 		tv1->Nodes->Add(newNode);
-		tv1->EndUpdate();
-		cout << "added";
+
+		cout << "added\n";
 	}
+	tv1->EndUpdate();
+
+	cout << "Finished\n";
 	/*::Cursor::Current = Cursors::Default;*/
 }
 
+[STAThread]
 void main()
 {
-	std::cout << "HELLO W.";
+	cout << "Main\n";
 
-	std::string test = "";
+	Application::EnableVisualStyles();
+	Application::SetCompatibleTextRenderingDefault(false);
 
-	//cout << "Main";
+	HealthTrail::UI form;
 
-	//Application::EnableVisualStyles();
-	//Application::SetCompatibleTextRenderingDefault(false);
+	cout << "Running\n";
 
-	//HealthTrail::UI form;
-	//	
-	//cout << "Running";
+	Application::Run(%form);
 
-	//Application::Run(%form);
-	//
-	//
+
 }

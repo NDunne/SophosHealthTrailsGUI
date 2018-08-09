@@ -26,7 +26,7 @@ private:
 		for (auto n : s)
 		{
 			if (n == '{' || n == '}' || n == '"') continue;
-			
+
 			if (n == ':' && r == KEY)
 			{
 					r = DATA;
@@ -45,7 +45,7 @@ private:
 						key = "";
 						r = KEY;
 					}
-					
+
 					continue;
 				}
 				else if (r = KEY)
@@ -93,13 +93,13 @@ public:
 		{
 			string k = mapIt->first;
 			vector<string> v = mapIt->second;
-			cout << "\n" << k << ": ";
+			/*cout << "\n" << k << ": ";
 			for (vector<string>::iterator vecIt = v.begin(); vecIt != v.end(); vecIt++)
 			{
 				cout << "   " << *vecIt << "\n";
-			}
+			}*/
 		}
-		cout << "\n";
+		//cout << "\n";
 	}
 };
 
