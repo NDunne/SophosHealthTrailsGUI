@@ -28,30 +28,41 @@ String^ manageString(std::string in)
 
 void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView ^ tv1)
 {	//Real
-	//vector<HealthEvent*> trail = ::readFromFolder("C:/ProgramData/Sophos/Health/Event Store/Trail");
+	map<string, map<string, vector<HealthEvent*> > > trail = ::readFromFolder("C:/ProgramData/Sophos/Health/Event Store/Trail");
 
 	//Home
-	/*vector<HealthEvent*> trail = ::readFromFolder("C:/Users/Nathan/Desktop/TestJson");*/ 
+	//map<string, map<string, vector<HealthEvent*> > > = ::readFromFolder("C:/Users/Nathan/Desktop/TestJson"); 
 	
 	//Work
-	
+	//map<string, map<string, vector<HealthEvent*> > > trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson");
+
 	tv1->Nodes->Clear();
-	
-	vector<HealthEvent*> trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson");
 
 	cout << "refreshed\n";
 
 	tv1->BeginUpdate();
+	
+	string sortBy1 = "app";
+	string sortBy2 = "timeStamp";
 
-	trail = MergeSort(trail, "timeStamp");
+	map<string, vector<HealthEvent*> > selectedTrail = trail[sortBy1];
 
-	for (std::vector<HealthEvent*>::iterator it = trail.begin(); it != trail.end(); it++)
+
+	for (map< string, vector<HealthEvent*> >::iterator mapIt = selectedTrail.begin(); mapIt != selectedTrail.end(); mapIt++)
 	{
 
-		TreeNode^ newNode = gcnew TreeNode(manageString(fancyDate((*it)->getFirstValue("timeStamp"))));
-
+		TreeNode^ newNode = gcnew TreeNode(manageString(fancyDate(mapIt->first)));
 		tv1->Nodes->Add(newNode);
 
+		vector<HealthEvent*> subNodes = selectedTrail[mapIt->first];
+
+		OutputDebugString(to_string(tv1->Nodes->IndexOf(newNode)).c_str());
+
+		for (vector<HealthEvent*>::iterator vecIt = subNodes.begin(); vecIt != subNodes.end(); vecIt++)
+		{
+			//tv1->Nodes->Item[tv1->Nodes->IndexOf(newNode)]->Nodes->Add(gcnew TreeNode(manageString((*vecIt)->getFirstValue(sortBy2))));
+			newNode->Nodes->Add(gcnew TreeNode(manageString((*vecIt)->getFirstValue(sortBy2))));
+		}
 	}
 	tv1->EndUpdate();
 }

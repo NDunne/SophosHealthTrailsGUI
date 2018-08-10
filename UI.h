@@ -1,7 +1,6 @@
 #pragma once
 #include "Header.h"
 #include "Sorter.h"
-#include "resource.h"
 
 using namespace std;
 
@@ -270,8 +269,6 @@ namespace HealthTrail {
 		}
 
 		private: void refreshMenuItem_Click(Object^ sender, EventArgs^ e) {
-			MessageBox::Show("REFRESH " + sender->ToString());
-
 			refreshData(this->treeView1);
 		}
 

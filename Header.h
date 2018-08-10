@@ -100,8 +100,6 @@ public:
 	}
 
 };
-vector<HealthEvent*> readFromFolder(string folder);
+map<string, map<string, vector<HealthEvent*> > > readFromFolder(string folder);
 
-vector<HealthEvent*> readFile(std::string path, vector<HealthEvent*> eventList);
-
-HealthEvent* createFromString(std::string s);
+map<string, map<string, vector<HealthEvent*> > > readFile(std::string path, map<string, map<string, vector<HealthEvent*> > > eventList);
