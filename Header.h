@@ -9,6 +9,8 @@
 #include <map>
 #include <algorithm>
 
+#include "resource.h"
+
 using namespace std;
 
 class HealthEvent

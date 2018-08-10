@@ -24,14 +24,16 @@ map<string, map<string, vector<HealthEvent*> > > readFile(std::string path, map<
 
 		f.close();
 
-		eventList["id"][h->getFirstValue("id")].push_back(h);
-		eventList["familyId"][h->getFirstValue("familyId")].push_back(h);
-		eventList["timeStamp"][h->getFirstValue("timeStamp")].push_back(h);
-		eventList["app"][h->getFirstValue("app")].push_back(h);
-		eventList["severity"][h->getFirstValue("severity")].push_back(h);
-		eventList["threatName"][h->getFirstValue("threatName")].push_back(h);
-		eventList["location"][h->getFirstValue("location")].push_back(h);
-		eventList["date"][h->getFirstValue("date")].push_back(h);
+		eventList["ID"][h->getFirstValue("id")].push_back(h);
+		eventList["Family ID"][h->getFirstValue("familyId")].push_back(h);
+		eventList["Time Stamp"][h->getFirstValue("timeStamp")].push_back(h);
+		eventList["App"][h->getFirstValue("app")].push_back(h);
+		eventList["Severity"][h->getFirstValue("severity")].push_back(h);
+		eventList["Threat Name"][h->getFirstValue("threatName")].push_back(h);
+		eventList["Location"][h->getFirstValue("location")].push_back(h);
+		eventList["Date"][h->getFirstValue("date")].push_back(h);
+		eventList["Service Name"][h->getFirstValue("serviceName")].push_back(h);
+		eventList["Resource ID"][h->getFirstValue("resourceId")].push_back(h);
 	}
 
 	if (f.is_open()) f.close();
