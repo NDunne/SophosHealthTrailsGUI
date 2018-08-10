@@ -3,24 +3,6 @@
 using namespace System;
 using namespace System::Windows::Forms;
 
-string fancyDate(string date)
-{
-	int dotCount = 0;
-	string buff{ "" };
-	for (auto n : date)
-	{
-		if (n == 'Z') continue;
-		else if (n == '-') buff += '/';
-		else if (n == 'T') buff += "   ";
-		else
-		{
-			if (n == '.') break;
-			buff += n;
-		}
-	}
-	return buff;
-}
-
 String^ manageString(std::string in)
 {
 	return gcnew String(in.c_str());
@@ -42,8 +24,8 @@ void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView ^ tv1)
 
 	tv1->BeginUpdate();
 	
-	string sortBy1 = "app";
-	string sortBy2 = "timeStamp";
+	string sortBy1 = "threatName";
+	string sortBy2 = "date";
 
 	map<string, vector<HealthEvent*> > selectedTrail = trail[sortBy1];
 
@@ -51,7 +33,7 @@ void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView ^ tv1)
 	for (map< string, vector<HealthEvent*> >::iterator mapIt = selectedTrail.begin(); mapIt != selectedTrail.end(); mapIt++)
 	{
 
-		TreeNode^ newNode = gcnew TreeNode(manageString(fancyDate(mapIt->first)));
+		TreeNode^ newNode = gcnew TreeNode(manageString(mapIt->first));
 		tv1->Nodes->Add(newNode);
 
 		vector<HealthEvent*> subNodes = selectedTrail[mapIt->first];

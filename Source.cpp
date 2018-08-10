@@ -31,6 +31,7 @@ map<string, map<string, vector<HealthEvent*> > > readFile(std::string path, map<
 		eventList["severity"][h->getFirstValue("severity")].push_back(h);
 		eventList["threatName"][h->getFirstValue("threatName")].push_back(h);
 		eventList["location"][h->getFirstValue("location")].push_back(h);
+		eventList["date"][h->getFirstValue("date")].push_back(h);
 	}
 
 	if (f.is_open()) f.close();

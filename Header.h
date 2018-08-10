@@ -21,7 +21,7 @@ private:
 		string buff{ "" };
 		string key{ "" };
 
-		enum readingState { KEY, DATA, LIST };
+		enum readingState { KEY, DATA, DATA_TIMESTAMP, LIST };
 		readingState r = KEY;
 		map<string, vector<string> > m;
 
@@ -33,12 +33,13 @@ private:
 			{
 					r = DATA;
 					key = buff;
+					if (key == "timeStamp") r = DATA_TIMESTAMP;
 					buff = "";
 					continue;
 			}
 			else if (n == ',' )
 			{
-				if (r == DATA || r == LIST)
+				if (r == DATA || r == DATA_TIMESTAMP || r == LIST)
 				{
 					m[key].push_back(buff);
 					buff = "";
@@ -57,6 +58,16 @@ private:
 			}
 			else if (n == '[') r = LIST;
 			else if (n == ']') r = DATA;
+			else if (r == DATA_TIMESTAMP)
+			{
+				if (n == '-') buff += '/' ;
+				else if (n == '.' || n == 'Z') break;
+				else if (n == 'T')
+				{
+					m["date"].push_back(buff);
+				}
+				else buff += n;
+			}
 			else
 			{
 				buff += n;
@@ -74,7 +85,8 @@ public:
 
 	string getFirstValue(string k) const
 	{
-		return values.at(k)[0];
+		try { return values.at(k)[0]; }
+		catch (...) { return "NOT FOUND"; }
 	}
 
 	vector<string> getValues(string k)
