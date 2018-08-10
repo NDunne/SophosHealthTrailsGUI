@@ -27,17 +27,17 @@ String^ manageString(std::string in)
 }
 
 void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView ^ tv1)
-{
-	//::Cursor::Current = gcnew System::Windows::Forms::Cursor("MyWait.cur");
-
-	//Real
-	vector<HealthEvent*> trail = ::readFromFolder("C:/ProgramData/Sophos/Health/Event Store/Trail");
+{	//Real
+	//vector<HealthEvent*> trail = ::readFromFolder("C:/ProgramData/Sophos/Health/Event Store/Trail");
 
 	//Home
 	/*vector<HealthEvent*> trail = ::readFromFolder("C:/Users/Nathan/Desktop/TestJson");*/ 
 	
 	//Work
-	//vector<HealthEvent*> trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson");
+	
+	tv1->Nodes->Clear();
+	
+	vector<HealthEvent*> trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson");
 
 	cout << "refreshed\n";
 
@@ -54,7 +54,6 @@ void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView ^ tv1)
 
 	}
 	tv1->EndUpdate();
-	/*::Cursor::Current = Cursors::Default;*/
 }
 
 [STAThreadAttribute]

@@ -1,6 +1,7 @@
 #pragma once
 #include "Header.h"
 #include "Sorter.h"
+#include "resource.h"
 
 using namespace std;
 
@@ -122,6 +123,7 @@ namespace HealthTrail {
 			this->refreshToolStripMenuItem->Name = L"refreshToolStripMenuItem";
 			this->refreshToolStripMenuItem->Size = System::Drawing::Size(113, 22);
 			this->refreshToolStripMenuItem->Text = L"Refresh";
+			this->refreshToolStripMenuItem->Click += gcnew System::EventHandler(this, &UI::refreshMenuItem_Click);
 			//
 			// exitToolStripMenuItem
 			//
@@ -179,6 +181,7 @@ namespace HealthTrail {
 			this->treeView1->Location = System::Drawing::Point(0, 26);
 			this->treeView1->Name = L"treeView1";
 			this->treeView1->Size = System::Drawing::Size(356, 424);
+			this->treeView1->Click += gcnew System::EventHandler(this, &UI::treeView1_Click);
 			this->treeView1->TabIndex = 0;
 			//
 			// webBrowser1
@@ -262,11 +265,21 @@ namespace HealthTrail {
 			MessageBox::Show("CLICKED");
 		}
 
+		private: void treeView1_Click(Object^ sender, EventArgs^ e) {
+			MessageBox::Show("CLICKED " + sender->ToString());
+		}
+
+		private: void refreshMenuItem_Click(Object^ sender, EventArgs^ e) {
+			MessageBox::Show("REFRESH " + sender->ToString());
+
+			refreshData(this->treeView1);
+		}
+
 		private: System::Void splitter1_SplitterMoved(System::Object^  sender, System::Windows::Forms::SplitterEventArgs^  e) {
 		}
 
 		private: System::Void treeView1_AfterSelect(System::Object^  sender, System::Windows::Forms::TreeViewEventArgs^  e) {
-				 }
+		}
 
 		private: System::Void textBox1_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 		}
