@@ -9,7 +9,6 @@
 #include <map>
 #include <algorithm>
 
-#include "resource.h"
 
 using namespace std;
 
@@ -88,7 +87,7 @@ public:
 	string getFirstValue(string k) const
 	{
 		try { return values.at(k)[0]; }
-		catch (...) { return "NOT FOUND"; }
+		catch (...) { return "Unknown"; }
 	}
 
 	vector<string> getValues(string k)

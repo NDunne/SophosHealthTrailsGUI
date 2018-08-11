@@ -6,7 +6,7 @@ using std::string;
 int rec = 0;
 
 //Merge sorted lists by map field
-vector<HealthEvent*> Merge(vector<HealthEvent*> A, vector<HealthEvent*> B, string field)
+vector<HealthEvent*> Merge(vector<HealthEvent*> A, vector<HealthEvent*> B, string field, bool order)
 {
 	vector<HealthEvent*>::iterator ItA = A.begin();
 	vector<HealthEvent*>::iterator ItB = B.begin();
@@ -18,7 +18,7 @@ vector<HealthEvent*> Merge(vector<HealthEvent*> A, vector<HealthEvent*> B, strin
 		string Aval = (*ItA)->getFirstValue(field);
 		string Bval = (*ItB)->getFirstValue(field);
 
-		if (Aval > Bval)
+		if (order? (Aval > Bval):(Aval < Bval))
 		{
 			result.push_back(*ItA);
 			ItA++;
@@ -49,7 +49,7 @@ vector<HealthEvent*> Merge(vector<HealthEvent*> A, vector<HealthEvent*> B, strin
 }
 
 //Standard merge sort by map key "field" - alphanumeric for now
-vector<HealthEvent*> MergeSort(vector<HealthEvent*> arr, string field)
+vector<HealthEvent*> MergeSort(vector<HealthEvent*> arr, string field, bool order)
 {
 	rec++;
 	OutputDebugString("COUNT:");
@@ -65,6 +65,6 @@ vector<HealthEvent*> MergeSort(vector<HealthEvent*> arr, string field)
 	vector<HealthEvent*> left(arr.begin(), arr.begin() + mid);
 	vector<HealthEvent*> right(arr.begin() + mid, arr.end());	//merge half each
 	
-	return Merge(MergeSort(left, field), MergeSort(right,field),field);
+	return Merge(MergeSort(left, field,order), MergeSort(right,field,order),field, order);
 
 }

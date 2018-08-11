@@ -18,7 +18,7 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 	tv1->BeginUpdate();
 
 	std::string sortBy1 = msclr::interop::marshal_as< std::string >(sb1);
-	std::string sortBy2 = msclr::interop::marshal_as< std::string >(sb2); //Managed String to std::string
+	std::string sortBy2 = fileString(msclr::interop::marshal_as< std::string >(sb2)); //Managed String to std::string
 
 	map<string, vector<HealthEvent*> > selectedTrail = trail[sortBy1];
 
@@ -29,9 +29,7 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 		TreeNode^ newNode = gcnew TreeNode(manageString(mapIt->first));
 		tv1->Nodes->Add(newNode);
 
-		vector<HealthEvent*> subNodes = selectedTrail[mapIt->first];
-
-		OutputDebugString(to_string(tv1->Nodes->IndexOf(newNode)).c_str());
+		vector<HealthEvent*> subNodes = MergeSort(selectedTrail[mapIt->first],sortBy2, (sortBy2 == "timeStamp" || sortBy2 == "Date"));
 
 		for (vector<HealthEvent*>::iterator vecIt = subNodes.begin(); vecIt != subNodes.end(); vecIt++)
 		{
@@ -57,7 +55,7 @@ void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView^ tv1, System:
 }
 
 [STAThreadAttribute]
-int main()
+int Main()
 {
 
 	Application::EnableVisualStyles();
