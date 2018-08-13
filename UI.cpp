@@ -4,12 +4,7 @@
 using namespace System;
 using namespace System::Windows::Forms;
 
-String^ manageString(std::string in)
-{
-	return gcnew String(in.c_str());
-}
-
-void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::String^ sb1, System::String^ sb2, map<string, map<string, vector<HealthEvent*> > > trail)
+void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::String^ sortBy1, System::String^ sortBy2, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail)
 {
 	tv1->Nodes->Clear();
 
@@ -17,45 +12,71 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 
 	tv1->BeginUpdate();
 
-	std::string sortBy1 = msclr::interop::marshal_as< std::string >(sb1);
-	std::string sortBy2 = fileString(msclr::interop::marshal_as< std::string >(sb2)); //Managed String to std::string
-
-	map<string, vector<HealthEvent*> > selectedTrail = trail[sortBy1];
-
-
-	for (map< string, vector<HealthEvent*> >::iterator mapIt = selectedTrail.begin(); mapIt != selectedTrail.end(); mapIt++)
+	Dictionary< String^, List< HealthEvent^ >^ >^ selectedTrail;
+	if (!trail->TryGetValue(sortBy1, selectedTrail)) return;	
+	
+	Dictionary< String^, List< HealthEvent^ >^ >::Enumerator selectedTrailEnum = selectedTrail->GetEnumerator();
+	while (selectedTrailEnum.MoveNext())
 	{
 
-		TreeNode^ newNode = gcnew TreeNode(manageString(mapIt->first));
-		tv1->Nodes->Add(newNode);
+		TreeNode^ t1Node = gcnew TreeNode(selectedTrailEnum.Current.Key);
+		tv1->Nodes->Add(t1Node);
 
-		vector<HealthEvent*> subNodes = MergeSort(selectedTrail[mapIt->first],sortBy2, (sortBy2 == "timeStamp" || sortBy2 == "Date"));
 
-		for (vector<HealthEvent*>::iterator vecIt = subNodes.begin(); vecIt != subNodes.end(); vecIt++)
+
+		List< HealthEvent^ >^ subNodes = selectedTrailEnum.Current.Value;
+		subNodes = MergeSort(subNodes, sortBy2, (sortBy2 == "timeStamp" || sortBy2 == "date")); //inverse alphabetical for dates
+		
+		List< HealthEvent^ >::Enumerator subNodesEnum = subNodes->GetEnumerator();
+
+		while (subNodesEnum.MoveNext());
 		{
-			//tv1->Nodes->Item[tv1->Nodes->IndexOf(newNode)]->Nodes->Add(gcnew TreeNode(manageString((*vecIt)->getFirstValue(sortBy2))));
-			newNode->Nodes->Add(gcnew TreeNode(manageString((*vecIt)->getFirstValue(sortBy2))));
+			String^ t2text = subNodesEnum.Current->getFirstValue(sortBy2);
+
+			if (t1Node->Nodes->ContainsKey(t2text))
+			{
+				TreeNode^ t2Node = t1Node->Nodes->Find(t2text, false)[0];
+
+				if (!t2Node->Nodes) //No children yet
+				{
+					HealthEvent^ h = (HealthEvent^) t2Node->Tag;
+					TreeNode^ pushDown = gcnew TreeNode(h->getFirstValue(manageString("id")));
+					t2Node->Nodes->Add(pushDown);
+					t2Node->Tag = NULL;					
+				}
+				TreeNode^ t3Node = gcnew TreeNode(subNodesEnum.Current->getFirstValue("id"));
+				t3Node->Tag = subNodesEnum.Current;
+				t2Node->Nodes->Add(t3Node);
+
+				t2Node->Nodes->Add(t3Node);
+			}
+			else
+			{
+				TreeNode^ t2Node = gcnew TreeNode(t2text);
+				t2Node->Tag = subNodesEnum.Current;
+				t1Node->Nodes->Add(t2Node);
+			}
 		}
 	}
 	tv1->EndUpdate();
 }
 
-void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView^ tv1, System::String^ sb1, System::String^ sb2)
+void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView^ tv1, System::String^ sb1, System::String^ sb2, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail)
 {	
 	//Real
-	map<string, map<string, vector<HealthEvent*> > > trail = ::readFromFolder("C:/ProgramData/Sophos/Health/Event Store/Trail");
+	trail = readFromFolder("C:/ProgramData/Sophos/Health/Event Store/Trail", trail);
 
 	//Home
-	//map<string, map<string, vector<HealthEvent*> > > = ::readFromFolder("C:/Users/Nathan/Desktop/TestJson"); 
+	//trail = ::readFromFolder("C:/Users/Nathan/Desktop/TestJson"); 
 	
 	//Work
-	//map<string, map<string, vector<HealthEvent*> > > trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson");
+	//trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson");
 
 	sortItems(tv1, sb1, sb2, trail);
 }
 
 [STAThreadAttribute]
-int Main()
+int main()
 {
 
 	Application::EnableVisualStyles();

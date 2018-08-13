@@ -11,26 +11,50 @@
 
 
 using namespace std;
+using namespace System;
+using namespace System::Collections::Generic;
 
-class HealthEvent
+String^ manageString(std::string in);
+
+ref class HealthEvent
 {
 private:
-	map<string, vector<string> > values;
+	Dictionary< String^, List< String^ >^ >^ values;
 
-	map<string, vector<string> > explode(const string& s)
+	//Creates new List under parameter key if first for that value, or adds to the existing List under the key
+	Dictionary< String^, List< String^ >^ >^ createOrAdd(Dictionary< String^, List< String^ >^ >^ map, String^ key, String^ val)
+	{
+		if (map->ContainsKey(key))
+		{
+			List< String^ >^ list;
+			if (map->TryGetValue(key, list)) list->Add(val);
+		}
+		else
+		{
+			List< String^ >^ newList = gcnew List< String^ >(0);
+			newList->Add(val);
+			map->Add(key, newList);
+		}
+		return map;
+	}
+
+	//Converts string JSON file into Managed Dictionary
+	Dictionary<String^, List<String^ >^ >^ explode(const string& s, Dictionary< String^, List< String^ >^ >^ map)
 	{
 		string buff{ "" };
 		string key{ "" };
 
+		//track what data is being read
 		enum readingState { KEY, DATA, DATA_TIMESTAMP, LIST };
-		readingState r = KEY;
-		map<string, vector<string> > m;
+		
+		readingState r = KEY; //First data will be a key
 
+		//Iterate characters in input string
 		for (auto n : s)
 		{
-			if (n == '{' || n == '}' || n == '"') continue;
+			if (n == '{' || n == '}' || n == '"') continue; //Ignore
 
-			if (n == ':' && r == KEY)
+			if (n == ':' && r == KEY) //Keys do not contain ':' so the end of the key has been reached
 			{
 					r = DATA;
 					key = buff;
@@ -38,11 +62,11 @@ private:
 					buff = "";
 					continue;
 			}
-			else if (n == ',' )
+			else if (n == ',' ) //List seperator. If a key did contain a comma this is accounted for
 			{
 				if (r == DATA || r == DATA_TIMESTAMP || r == LIST)
 				{
-					m[key].push_back(buff);
+					createOrAdd(map, manageString(key), manageString(buff));
 					buff = "";
 					if (r == DATA)
 					{
@@ -57,25 +81,26 @@ private:
 					buff += n;
 				}
 			}
-			else if (n == '[') r = LIST;
-			else if (n == ']') r = DATA;
-			else if (r == DATA_TIMESTAMP)
+			else if (n == '[') r = LIST;	//Start of list
+			else if (n == ']') r = DATA;	//End of list
+			else if (r == DATA_TIMESTAMP)	//Special case for timestamp, to allow date to be added as well
 			{
-				if (n == '-') buff += '/' ;
-				else if (n == '.' || n == 'Z') break;
-				else if (n == 'T')
+				if (n == '-') buff += '/' ;	//replace '-' with '/' for prettiness
+				else if (n == '.' || n == 'Z') break; //closing Z and fractional seconds ignored
+				else if (n == 'T')			//T character seperates date and time 
 				{
-					m["date"].push_back(buff);
+					createOrAdd(map, manageString("date"), manageString(buff));
+					//buffer is not clearered so date is still in timeStamp
 				}
 				else buff += n;
 			}
 			else
 			{
-				buff += n;
+				buff += n;	//default is add character to buffer
 			}
 		}
-		if (buff != "") m[key].push_back(buff);
-		return m;
+		if (buff != "") createOrAdd(map, manageString(key), manageString(buff)); //add last K/V pair if exists
+		return map;
 	}
 
 public:
@@ -84,35 +109,28 @@ public:
 		setFromString(s);
 	}
 
-	string getFirstValue(string k) const
+	String^ getFirstValue(String^ k)
 	{
-		try { return values.at(k)[0]; }
-		catch (...) { return "Unknown"; }
+		try { 
+			return getValues(k)->ToArray()[0];
+		}
+		catch (...) { return "unknown"; }
 	}
 
-	vector<string> getValues(string k)
+	List< String^ >^ getValues(String^ k)
 	{
-		return values[k];
+			List< String^ >^ vList;
+			values->TryGetValue(k, vList);
+			return vList;
 	}
 
 	void setFromString(string s)
 	{
-		values = explode(s);
-
-		for (map<string, vector<string> >::iterator mapIt = values.begin(); mapIt != values.end(); mapIt++)
-		{
-			string k = mapIt->first;
-			vector<string> v = mapIt->second;
-			/*cout << "\n" << k << ": ";
-			for (vector<string>::iterator vecIt = v.begin(); vecIt != v.end(); vecIt++)
-			{
-				cout << "   " << *vecIt << "\n";
-			}*/
-		}
-		//cout << "\n";
+		values = gcnew Dictionary< String^, List< String^ >^ >(0);
+		values = explode(s, values);
 	}
 
 };
-map<string, map<string, vector<HealthEvent*> > > readFromFolder(string folder);
+Dictionary< String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ readFromFolder(string folder, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList);
 
-map<string, map<string, vector<HealthEvent*> > > readFile(std::string path, map<string, map<string, vector<HealthEvent*> > > eventList);
+Dictionary< String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ readFile(string path, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList);

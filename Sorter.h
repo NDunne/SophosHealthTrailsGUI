@@ -1,4 +1,4 @@
 #pragma once
 #include "Header.h"
 
-vector<HealthEvent*> MergeSort(vector<HealthEvent*> arr, string field, bool order);
+List< HealthEvent^ >^ MergeSort(List< HealthEvent^ >^ arr, String^ field, bool order);

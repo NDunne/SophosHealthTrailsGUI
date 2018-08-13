@@ -3,54 +3,83 @@
 using std::vector;
 using std::string;
 
-map<string, map<string, vector<HealthEvent*> > > readFile(std::string path, map<string, map<string, vector<HealthEvent*> > > eventList)
+String^ manageString(std::string in)
 {
-	std::ifstream f;
-	f.open(path, std::ifstream::in);
-	//std::cout << path << "\n";
+	return gcnew String(in.c_str());
+}
 
-	if (f.fail())
+Dictionary< String^, List< HealthEvent^ >^ >^ addHealthEvent(Dictionary< String^, List< HealthEvent^ >^ >^ eventSingle, string key, HealthEvent^ h)
+{
+	List< HealthEvent^ >^ addTo = gcnew List< HealthEvent^ >(0);
+	if (eventSingle->TryGetValue(manageString(key), addTo)) addTo->Add(h);
+	else
 	{
-		std::cout << (f.bad() ? "R/W error" : "Logical error");
+		List< HealthEvent^ >^ addTo = gcnew List< HealthEvent^ >(0);
+		addTo->Add(h);
+		eventSingle->Add(manageString(key),addTo);
 	}
+	return eventSingle;
+}
 
-	std::string s((istreambuf_iterator<char>(f.rdbuf())),istreambuf_iterator<char>());
-	
-	HealthEvent* h;
+Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ createAndAdd(Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList, string userKey, string fileKey, HealthEvent^ h)
+{
+	Dictionary< String^, List< HealthEvent^ >^ >^ eventSingle = gcnew Dictionary< String^, List< HealthEvent^ >^ >(0);
+	if (eventList->TryGetValue(manageString(userKey), eventSingle)) addHealthEvent(eventSingle, fileKey, h);
+	else
+	{
+		Dictionary< String^, List< HealthEvent^ >^ >^ eventSingle = gcnew Dictionary< String^, List< HealthEvent^ >^ >(0);
+		addHealthEvent(eventSingle, fileKey, h);
+		eventList->Add(manageString(userKey), eventSingle);
+	}
+	return eventList;
+}
 
+Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ readFile(string path, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList)
+{
 	if (path.substr(path.length() - 5) == ".json")
 	{
-		h = new HealthEvent(s);
+		std::ifstream f;
+		f.open(path, std::ifstream::in);
+		//std::cout << path << "\n";
+
+		if (f.fail())
+		{
+			std::cout << (f.bad() ? "R/W error" : "Logical error");
+		}
+	
+		std::string s((istreambuf_iterator<char>(f.rdbuf())),istreambuf_iterator<char>());
+	
+		HealthEvent^ h;
+		h = gcnew HealthEvent(s);
 
 		f.close();
 
-		eventList["ID"][h->getFirstValue("id")].push_back(h);
-		eventList["Family ID"][h->getFirstValue("familyId")].push_back(h);
-		eventList["Time Stamp"][h->getFirstValue("timeStamp")].push_back(h);
-		eventList["App"][h->getFirstValue("app")].push_back(h);
-		eventList["Severity"][h->getFirstValue("severity")].push_back(h);
-		eventList["Threat Name"][h->getFirstValue("threatName")].push_back(h);
-		eventList["Location"][h->getFirstValue("location")].push_back(h);
-		eventList["Date"][h->getFirstValue("date")].push_back(h);
-		eventList["Service Name"][h->getFirstValue("serviceName")].push_back(h);
-		eventList["Resource ID"][h->getFirstValue("resourceId")].push_back(h);
+		//Could generate these in a more data driven way, fine for now
+		createAndAdd(eventList, "ID", "id", h);
+		createAndAdd(eventList, "Family ID", "familyId", h);
+		createAndAdd(eventList, "Time Stamp", "timeStamp", h);
+		createAndAdd(eventList, "App", "app", h);
+		createAndAdd(eventList, "Severity", "severity", h);
+		createAndAdd(eventList, "Threat Name", "threatName", h);
+		createAndAdd(eventList, "Location", "location", h);
+		createAndAdd(eventList, "Date", "date", h);
+		createAndAdd(eventList, "Service Name", "serviceName", h);
+		createAndAdd(eventList, "Resource ID", "resourceId", h);
+	
+		if (f.is_open()) f.close();
 	}
-
-	if (f.is_open()) f.close();
 
 	return eventList;
 }
 
 //find all filenames in given filepath
-map<string, map<string, vector<HealthEvent*> > > readFromFolder(string folder)
+Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^  readFromFolder(string folder, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList)
 {
 	WIN32_FIND_DATA fd;
 	std::string search_path = folder + "/*.*";
 	HANDLE hFind = ::FindFirstFile(search_path.c_str(), &fd);
 
-	map<string, map<string, vector<HealthEvent*> > > eventList;
-	//event list is a map key hashField as a string, value a map of that value to HealthEvent objects.
-	//Each HealthEvent is stored multiple times by each field a user might want to order by.
+	//Key: data field that value dictionary is indexed by
 
 	if (hFind != INVALID_HANDLE_VALUE) {
 		do {

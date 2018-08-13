@@ -53,15 +53,17 @@ namespace HealthTrail {
 	{
 	public:
 
-		void refreshData(System::Windows::Forms::TreeView^ tv1, System::String^ sb1, System::String^ sb2);
+		void refreshData(System::Windows::Forms::TreeView^ tv1, System::String^ sb1, System::String^ sb2, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail);
 
-		void sortItems(System::Windows::Forms::TreeView ^ tv1, System::String^ sb1, System::String^ sb2, map<string, map<string, vector<HealthEvent*> > > trail);
+		void sortItems(System::Windows::Forms::TreeView ^ tv1, System::String^ sb1, System::String^ sb2, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail);
 
 		UI(void)
 		{
 			InitializeComponent();
 
-			refreshData(this->treeView1, this->comboBox1->SelectedItem->ToString(), this->comboBox2->SelectedItem->ToString());
+			Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail();
+
+			refreshData(this->treeView1, this->comboBox1->SelectedItem->ToString(), this->comboBox2->SelectedItem->ToString(), this->trail);
 		}
 
 	protected:
@@ -97,8 +99,7 @@ namespace HealthTrail {
 	protected:
 
 	private:
-
-		//map<string, map<string, vector<HealthEvent*> > > trail;
+		Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail;
 
 		/// <summary>
 		/// Required designer variable.
@@ -112,6 +113,8 @@ namespace HealthTrail {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			trail = gcnew Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >(0);
+
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->refreshToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -323,14 +326,14 @@ namespace HealthTrail {
 		#pragma endregion
 
 		private: void FilterButtonClick(Object^ sender, EventArgs^ e) {
-			refreshData(this->treeView1, this->comboBox1->SelectedItem->ToString(), this->comboBox2->SelectedItem->ToString());
+			refreshData(this->treeView1, this->comboBox1->SelectedItem->ToString(), this->comboBox2->SelectedItem->ToString(), this->trail);
 		}
 
 		private: void treeView1_Click(Object^ sender, EventArgs^ e) {
 		}
 
 		private: void refreshMenuItem_Click(Object^ sender, EventArgs^ e) {
-			refreshData(this->treeView1, this->comboBox1->SelectedValue->ToString(), this->comboBox2->SelectedValue->ToString());
+			sortItems(this->treeView1, this->comboBox1->SelectedValue->ToString(), this->comboBox2->SelectedValue->ToString(), this->trail);
 		}
 
 		private: System::Void splitter1_SplitterMoved(System::Object^  sender, System::Windows::Forms::SplitterEventArgs^  e) {

@@ -6,65 +6,63 @@ using std::string;
 int rec = 0;
 
 //Merge sorted lists by map field
-vector<HealthEvent*> Merge(vector<HealthEvent*> A, vector<HealthEvent*> B, string field, bool order)
+List< HealthEvent^ >^ Merge(List< HealthEvent^ >^ A, List< HealthEvent^ >^ B, String^ field, bool order)
 {
-	vector<HealthEvent*>::iterator ItA = A.begin();
-	vector<HealthEvent*>::iterator ItB = B.begin();
+	List< HealthEvent^ >::Enumerator enumA = A->GetEnumerator();
+	List< HealthEvent^ >::Enumerator enumB = B->GetEnumerator();
 
-	vector<HealthEvent*> result;
+	enumA.MoveNext();
+	enumB.MoveNext();
 
-	while (ItA != A.end() && ItB != B.end())
+	List< HealthEvent^ >^ result = gcnew List< HealthEvent^ >(0);
+
+	while (true)
 	{
-		string Aval = (*ItA)->getFirstValue(field);
-		string Bval = (*ItB)->getFirstValue(field);
+		String^ Aval = enumA.Current->getFirstValue(field);
+		String^ Bval = enumB.Current->getFirstValue(field);
 
-		if (order? (Aval > Bval):(Aval < Bval))
+		if (order ? (Aval->CompareTo(Bval)) : (Aval->CompareTo(Bval)))
 		{
-			result.push_back(*ItA);
-			ItA++;
+			result->Add(enumA.Current);
+			if (!enumA.MoveNext())
+			{
+				do
+				{
+					result->Add(enumB.Current);
+				} while (enumB.MoveNext());
+				break;
+			}
+			
 		}
 
 		else
 		{
-			result.push_back(*ItB);
-			ItB++;
+			result->Add(enumB.Current);
+			if (!enumB.MoveNext())
+			{
+				do
+				{
+					result->Add(enumA.Current);
+				} while (enumA.MoveNext());
+				break;
+			}
 		}
 	}
-	
-	while (ItA != A.end())
-	{
-		result.push_back(*ItA);
-		ItA++;
-	}
-
-	while (ItB != B.end())
-	{
-		result.push_back(*ItB);
-		ItB++;
-	}
-
-	OutputDebugString("Merged");
 
 	return result;
 }
 
 //Standard merge sort by map key "field" - alphanumeric for now
-vector<HealthEvent*> MergeSort(vector<HealthEvent*> arr, string field, bool order)
+List< HealthEvent^ >^ MergeSort(List< HealthEvent^ >^ arr, String^ field, bool order)
 {
-	rec++;
-	OutputDebugString("COUNT:");
-	OutputDebugString(to_string(rec).c_str());
 
-	OutputDebugString("MERGE SORTING ");
-	OutputDebugString(to_string(arr.size()).c_str());
+	if (arr->Count < 2) return arr; //Single or zero return
 
-	if (arr.size() < 2) return arr; //Single or zero return
+	int mid = arr->Count / 2;
 
-	int mid = arr.size() / 2;
-
-	vector<HealthEvent*> left(arr.begin(), arr.begin() + mid);
-	vector<HealthEvent*> right(arr.begin() + mid, arr.end());	//merge half each
+	List< HealthEvent^ >^ left(arr->GetRange(0,mid));
+	List< HealthEvent^ >^ right(arr->GetRange(mid, arr->Count - mid));
 	
-	return Merge(MergeSort(left, field,order), MergeSort(right,field,order),field, order);
+	return Merge(MergeSort(left,field,order), MergeSort(right,field,order), field, order);
 
 }
