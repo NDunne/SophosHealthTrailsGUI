@@ -12,7 +12,7 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 
 	tv1->BeginUpdate();
 
-	Dictionary< String^, List< HealthEvent^ >^ >^ selectedTrail;
+	Dictionary< String^, List< HealthEvent^ >^ >^ selectedTrail = gcnew Dictionary< String^, List< HealthEvent^ >^ >(0);
 	if (!trail->TryGetValue(sortBy1, selectedTrail)) return;	
 	
 	Dictionary< String^, List< HealthEvent^ >^ >::Enumerator selectedTrailEnum = selectedTrail->GetEnumerator();
@@ -64,13 +64,13 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView^ tv1, System::String^ sb1, System::String^ sb2, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail)
 {	
 	//Real
-	trail = readFromFolder("C:/ProgramData/Sophos/Health/Event Store/Trail", trail);
+	//trail = readFromFolder("C:/ProgramData/Sophos/Health/Event Store/Trail", trail);
 
 	//Home
-	//trail = ::readFromFolder("C:/Users/Nathan/Desktop/TestJson"); 
+	//trail = ::readFromFolder("C:/Users/Nathan/Desktop/TestJson", trail); 
 	
 	//Work
-	//trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson");
+	trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson", trail);
 
 	sortItems(tv1, sb1, sb2, trail);
 }
