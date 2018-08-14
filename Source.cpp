@@ -8,15 +8,15 @@ String^ manageString(std::string in)
 	return gcnew String(in.c_str());
 }
 
-Dictionary< String^, List< HealthEvent^ >^ >^ addHealthEvent(Dictionary< String^, List< HealthEvent^ >^ >^ eventSingle, string key, HealthEvent^ h)
+Dictionary< String^, List< HealthEvent^ >^ >^ addHealthEvent(Dictionary< String^, List< HealthEvent^ >^ >^ eventSingle, String^ key, HealthEvent^ h)
 {
 	List< HealthEvent^ >^ addTo = gcnew List< HealthEvent^ >(0);
-	if (eventSingle->TryGetValue(manageString(key), addTo)) addTo->Add(h);
+	if (eventSingle->TryGetValue(key, addTo)) addTo->Add(h);
 	else
 	{
 		List< HealthEvent^ >^ addTo = gcnew List< HealthEvent^ >(0);
 		addTo->Add(h);
-		eventSingle->Add(manageString(key),addTo);
+		eventSingle->Add(key,addTo);
 	}
 	return eventSingle;
 }
@@ -24,11 +24,11 @@ Dictionary< String^, List< HealthEvent^ >^ >^ addHealthEvent(Dictionary< String^
 Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ createAndAdd(Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList, string userKey, string fileKey, HealthEvent^ h)
 {
 	Dictionary< String^, List< HealthEvent^ >^ >^ eventSingle = gcnew Dictionary< String^, List< HealthEvent^ >^ >(0);
-	if (eventList->TryGetValue(manageString(userKey), eventSingle)) addHealthEvent(eventSingle, fileKey, h);
+	if (eventList->TryGetValue(manageString(userKey), eventSingle)) addHealthEvent(eventSingle, h->getFirstValue(manageString(fileKey)), h);
 	else
 	{
 		Dictionary< String^, List< HealthEvent^ >^ >^ eventSingle = gcnew Dictionary< String^, List< HealthEvent^ >^ >(0);
-		addHealthEvent(eventSingle, fileKey, h);
+		addHealthEvent(eventSingle, h->getFirstValue(manageString(fileKey)), h);
 		eventList->Add(manageString(userKey), eventSingle);
 	}
 	return eventList;

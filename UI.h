@@ -14,7 +14,7 @@ namespace HealthTrail {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-	string userString(string in)
+	String^ userString(String^ in)
 	{
 		if (in == "id") return "ID";
 		else if (in == "familyId") return "Family ID";
@@ -29,7 +29,7 @@ namespace HealthTrail {
 		else return in;
 	}
 
-	string fileString(string in)
+	String^ fileString(String^ in)
 	{
 		if (in == "ID") return "id";
 		else if (in == "Family ID") return "familyId";
@@ -63,7 +63,7 @@ namespace HealthTrail {
 
 			Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail();
 
-			refreshData(this->treeView1, this->comboBox1->SelectedItem->ToString(), this->comboBox2->SelectedItem->ToString(), this->trail);
+			refreshData(this->treeView1, "App", "id", this->trail);
 		}
 
 	protected:
@@ -239,7 +239,7 @@ namespace HealthTrail {
 			this->Submit->Size = System::Drawing::Size(33, 25);
 			this->Submit->TabIndex = 7;
 			this->Submit->UseVisualStyleBackColor = true;
-			this->Submit->Click += gcnew System::EventHandler(this, &UI::FilterButtonClick);
+			this->Submit->Click += gcnew System::EventHandler(this, &UI::GroupButtonClick);
 			// 
 			// comboBox1
 			// 
@@ -325,15 +325,15 @@ namespace HealthTrail {
 		}
 		#pragma endregion
 
-		private: void FilterButtonClick(Object^ sender, EventArgs^ e) {
-			refreshData(this->treeView1, this->comboBox1->SelectedItem->ToString(), this->comboBox2->SelectedItem->ToString(), this->trail);
+		private: void GroupButtonClick(Object^ sender, EventArgs^ e) {
+			sortItems(this->treeView1, this->comboBox1->SelectedItem->ToString(), fileString(this->comboBox2->SelectedItem->ToString()), this->trail);
 		}
 
 		private: void treeView1_Click(Object^ sender, EventArgs^ e) {
 		}
 
 		private: void refreshMenuItem_Click(Object^ sender, EventArgs^ e) {
-			sortItems(this->treeView1, this->comboBox1->SelectedValue->ToString(), this->comboBox2->SelectedValue->ToString(), this->trail);
+			sortItems(this->treeView1, this->comboBox1->SelectedItem->ToString(), fileString(this->comboBox2->SelectedItem->ToString()), this->trail);
 		}
 
 		private: System::Void splitter1_SplitterMoved(System::Object^  sender, System::Windows::Forms::SplitterEventArgs^  e) {

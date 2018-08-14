@@ -20,6 +20,7 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 	{
 
 		TreeNode^ t1Node = gcnew TreeNode(selectedTrailEnum.Current.Key);
+		t1Node->Name = selectedTrailEnum.Current.Key;
 		tv1->Nodes->Add(t1Node);
 
 
@@ -29,7 +30,7 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 		
 		List< HealthEvent^ >::Enumerator subNodesEnum = subNodes->GetEnumerator();
 
-		while (subNodesEnum.MoveNext());
+		while (subNodesEnum.MoveNext())
 		{
 			String^ t2text = subNodesEnum.Current->getFirstValue(sortBy2);
 
@@ -37,7 +38,7 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 			{
 				TreeNode^ t2Node = t1Node->Nodes->Find(t2text, false)[0];
 
-				if (!t2Node->Nodes) //No children yet
+				if (!(t2Node->Nodes->GetEnumerator()->MoveNext())) //No children yet
 				{
 					HealthEvent^ h = (HealthEvent^) t2Node->Tag;
 					TreeNode^ pushDown = gcnew TreeNode(h->getFirstValue(manageString("id")));
@@ -45,14 +46,14 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 					t2Node->Tag = NULL;					
 				}
 				TreeNode^ t3Node = gcnew TreeNode(subNodesEnum.Current->getFirstValue("id"));
+				t3Node->Name = t3Node->Text;
 				t3Node->Tag = subNodesEnum.Current;
-				t2Node->Nodes->Add(t3Node);
-
 				t2Node->Nodes->Add(t3Node);
 			}
 			else
 			{
 				TreeNode^ t2Node = gcnew TreeNode(t2text);
+				t2Node->Name = t2text;
 				t2Node->Tag = subNodesEnum.Current;
 				t1Node->Nodes->Add(t2Node);
 			}
@@ -64,13 +65,13 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView^ tv1, System::String^ sb1, System::String^ sb2, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail)
 {	
 	//Real
-	//trail = readFromFolder("C:/ProgramData/Sophos/Health/Event Store/Trail", trail);
+	trail = readFromFolder("C:/ProgramData/Sophos/Health/Event Store/Trail", trail);
 
 	//Home
 	//trail = ::readFromFolder("C:/Users/Nathan/Desktop/TestJson", trail); 
 	
 	//Work
-	trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson", trail);
+	//trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson", trail);
 
 	sortItems(tv1, sb1, sb2, trail);
 }

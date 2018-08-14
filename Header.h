@@ -68,7 +68,7 @@ private:
 				{
 					createOrAdd(map, manageString(key), manageString(buff));
 					buff = "";
-					if (r == DATA)
+					if (r == DATA || r == DATA_TIMESTAMP)
 					{
 						key = "";
 						r = KEY;
@@ -86,7 +86,7 @@ private:
 			else if (r == DATA_TIMESTAMP)	//Special case for timestamp, to allow date to be added as well
 			{
 				if (n == '-') buff += '/' ;	//replace '-' with '/' for prettiness
-				else if (n == '.' || n == 'Z') break; //closing Z and fractional seconds ignored
+				else if (n == 'Z') continue; //closing Z ignored
 				else if (n == 'T')			//T character seperates date and time 
 				{
 					createOrAdd(map, manageString("date"), manageString(buff));
