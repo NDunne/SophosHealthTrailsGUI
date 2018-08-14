@@ -37,13 +37,20 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 			if (t1Node->Nodes->ContainsKey(t2text))
 			{
 				TreeNode^ t2Node = t1Node->Nodes->Find(t2text, false)[0];
-
 				if (!(t2Node->Nodes->GetEnumerator()->MoveNext())) //No children yet
 				{
-					HealthEvent^ h = (HealthEvent^) t2Node->Tag;
-					TreeNode^ pushDown = gcnew TreeNode(h->getFirstValue(manageString("id")));
-					t2Node->Nodes->Add(pushDown);
-					t2Node->Tag = NULL;					
+					auto ienum = t2Node->Parent->Nodes->GetEnumerator();
+					while (ienum->MoveNext())
+					{
+						try
+						{
+							HealthEvent^ h = (HealthEvent^)((TreeNode^)ienum->Current)->Tag;
+							TreeNode^ pushDown = gcnew TreeNode(h->getFirstValue(manageString("id")));
+							((TreeNode^)ienum->Current)->Nodes->Add(pushDown);
+							((TreeNode^)ienum->Current)->Tag = NULL;
+						}
+						catch (...) {}
+					}
 				}
 				TreeNode^ t3Node = gcnew TreeNode(subNodesEnum.Current->getFirstValue("id"));
 				t3Node->Name = t3Node->Text;
