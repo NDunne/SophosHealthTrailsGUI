@@ -57,7 +57,7 @@ namespace HealthTrail {
 
 	private: System::Windows::Forms::SplitContainer^  splitContainer1;
 	public: System::Windows::Forms::TreeView^  treeView1;
-	private: System::Windows::Forms::TextBox^  textBox1;
+	//private: System::Windows::Forms::TextBox^  textBox1;
 	private: System::Windows::Forms::WebBrowser^  webBrowser1;
 
 	private: System::Windows::Forms::Button^  Submit;
@@ -82,6 +82,14 @@ namespace HealthTrail {
 		{
 			trail = gcnew Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >(0);
 
+			Int32 scrHeight = GetSystemMetrics(SM_CYSCREEN);
+
+			Int32 treeWidth = 7 * scrHeight / 24;
+			Int32 browserWidth = scrHeight / 3;
+
+			Int32 winWidth = treeWidth + browserWidth;
+			Int32 winHeight = scrHeight / 2;
+
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->refreshToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -94,7 +102,7 @@ namespace HealthTrail {
 			this->Submit = (gcnew System::Windows::Forms::Button());
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->comboBox2 = (gcnew System::Windows::Forms::ComboBox());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			//this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->treeView1 = (gcnew System::Windows::Forms::TreeView());
 			this->webBrowser1 = (gcnew System::Windows::Forms::WebBrowser());
 			this->menuStrip1->SuspendLayout();
@@ -110,9 +118,12 @@ namespace HealthTrail {
 				this->fileToolStripMenuItem,
 					this->configToolStripMenuItem, this->helpToolStripMenuItem
 			});
+
+			Int32 menuHeight = winHeight / 25;
+
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
-			this->menuStrip1->Size = System::Drawing::Size(1070, 24);
+			this->menuStrip1->Size = System::Drawing::Size(winWidth, menuHeight);
 			this->menuStrip1->TabIndex = 0;
 			this->menuStrip1->Text = L"menuStrip1";
 			// 
@@ -120,163 +131,168 @@ namespace HealthTrail {
 			// 
 			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
 				this->refreshToolStripMenuItem,
-					this->exitToolStripMenuItem
+				this->exitToolStripMenuItem
 			});
 			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
-			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
+			this->fileToolStripMenuItem->Size = System::Drawing::Size(40, menuHeight);
 			this->fileToolStripMenuItem->Text = L"File";
 			// 
 			// refreshToolStripMenuItem
 			// 
 			this->refreshToolStripMenuItem->Name = L"refreshToolStripMenuItem";
-			this->refreshToolStripMenuItem->Size = System::Drawing::Size(113, 22);
+			this->refreshToolStripMenuItem->Size = System::Drawing::Size(100, menuHeight);
 			this->refreshToolStripMenuItem->Text = L"Refresh";
 			this->refreshToolStripMenuItem->Click += gcnew System::EventHandler(this, &UI::refreshMenuItem_Click);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(113, 22);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(100, menuHeight);
 			this->exitToolStripMenuItem->Text = L"Exit";
 			// 
 			// configToolStripMenuItem
 			// 
 			this->configToolStripMenuItem->Name = L"configToolStripMenuItem";
-			this->configToolStripMenuItem->Size = System::Drawing::Size(55, 20);
+			this->configToolStripMenuItem->Size = System::Drawing::Size(40, menuHeight);
 			this->configToolStripMenuItem->Text = L"Config";
 			// 
 			// helpToolStripMenuItem
 			// 
 			this->helpToolStripMenuItem->Name = L"helpToolStripMenuItem";
-			this->helpToolStripMenuItem->Size = System::Drawing::Size(44, 20);
+			this->helpToolStripMenuItem->Size = System::Drawing::Size(40, menuHeight);
 			this->helpToolStripMenuItem->Text = L"Help";
 			// 
 			// splitContainer1
 			// 
 			this->splitContainer1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->splitContainer1->Location = System::Drawing::Point(0, 24);
+			this->splitContainer1->Location = System::Drawing::Point(0, menuHeight);
 			this->splitContainer1->Name = L"splitContainer1";
 			// 
 			// splitContainer1.Panel1
 			// 
-			this->splitContainer1->Panel1->Controls->Add(this->label2);
-			this->splitContainer1->Panel1->Controls->Add(this->label1);
-			this->splitContainer1->Panel1->Controls->Add(this->Submit);
 			this->splitContainer1->Panel1->Controls->Add(this->comboBox1);
 			this->splitContainer1->Panel1->Controls->Add(this->comboBox2);
-			this->splitContainer1->Panel1->Controls->Add(this->textBox1);
+			this->splitContainer1->Panel1->Controls->Add(this->label1);
+			this->splitContainer1->Panel1->Controls->Add(this->label2);
+			this->splitContainer1->Panel1->Controls->Add(this->Submit);
+			//this->splitContainer1->Panel1->Controls->Add(this->textBox1);
 			this->splitContainer1->Panel1->Controls->Add(this->treeView1);
 			// 
 			// splitContainer1.Panel2
 			// 
 			this->splitContainer1->Panel2->Controls->Add(this->webBrowser1);
-			this->splitContainer1->Size = System::Drawing::Size(1070, 475);
-			this->splitContainer1->SplitterDistance = 364;
+			this->splitContainer1->Size = System::Drawing::Size(winWidth, winHeight);
+			this->splitContainer1->SplitterDistance = treeWidth;
 			this->splitContainer1->TabIndex = 1;
-			// 
-			// label2
-			// 
-			this->label2->AutoSize = true;
-			this->label2->Font = (gcnew System::Drawing::Font(L"Consolas", 9));
-			this->label2->Location = System::Drawing::Point(183, 7);
-			this->label2->Margin = System::Windows::Forms::Padding(0);
-			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(42, 14);
-			this->label2->TabIndex = 9;
-			this->label2->Text = L"Then:";
 			// 
 			// label1
 			// 
-			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Consolas", 9));
-			this->label1->Location = System::Drawing::Point(10, 7);
+
+			Int32 font120 = scrHeight / 120;
+			this->label1->Font = (gcnew System::Drawing::Font(L"Consolas", font120));
+			this->label1->Location = System::Drawing::Point(0, 0);
 			this->label1->Margin = System::Windows::Forms::Padding(0);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(70, 14);
+			this->label1->AutoSize = false;
+			this->label1->Size = System::Drawing::Size(treeWidth/4, menuHeight);
 			this->label1->TabIndex = 8;
 			this->label1->Text = L"Group By:";
+			this->label1->TextAlign = ContentAlignment::MiddleRight;
+			// 
+			// label2
+			// 
+			this->label2->Font = (gcnew System::Drawing::Font(L"Consolas", font120));
+			this->label2->Location = System::Drawing::Point(treeWidth/2, 0);
+			this->label2->Margin = System::Windows::Forms::Padding(0);
+			this->label2->Name = L"label2";
+			this->label2->AutoSize = false;
+			this->label2->Size = System::Drawing::Size(treeWidth/8, menuHeight);
+			this->label2->TabIndex = 9;
+			this->label2->Text = L"Then:";
+			this->label2->TextAlign = ContentAlignment::MiddleRight;
 			// 
 			// Submit
 			// 
-			this->Submit->Location = System::Drawing::Point(328, 2);
-			this->Submit->Margin = System::Windows::Forms::Padding(3, 0, 3, 0);
+			this->Submit->Location = System::Drawing::Point(7*treeWidth/8, 0);
+			this->Submit->Margin = System::Windows::Forms::Padding(0);
 			this->Submit->Name = L"Submit";
-			this->Submit->Size = System::Drawing::Size(33, 25);
+			this->Submit->Size = System::Drawing::Size(treeWidth/8, menuHeight);
 			this->Submit->TabIndex = 7;
 			this->Submit->UseVisualStyleBackColor = true;
+			this->Submit->Text = "Go";
 			this->Submit->Click += gcnew System::EventHandler(this, &UI::GroupButtonClick);
 			// 
 			// comboBox1
 			// 
-			this->comboBox1->Font = (gcnew System::Drawing::Font(L"Consolas", 9));
+			this->comboBox1->Font = (gcnew System::Drawing::Font(L"Consolas", font120));
 			this->comboBox1->FormattingEnabled = true;
 			this->comboBox1->Items->AddRange(gcnew cli::array< System::Object^  >(10) {
 				L"ID", L"Family ID", L"App", L"Date", L"Location",
 					L"Severity", L"Service Name", L"Resource ID", L"Threat Name", L"Time Stamp"
 			});
-			this->comboBox1->Location = System::Drawing::Point(80, 4);
+			this->comboBox1->Location = System::Drawing::Point(treeWidth/4, 0);
 			this->comboBox1->Margin = System::Windows::Forms::Padding(0);
 			this->comboBox1->Name = L"comboBox1";
-			this->comboBox1->Size = System::Drawing::Size(100, 22);
+			this->comboBox1->Size = System::Drawing::Size(treeWidth / 4, menuHeight);
 			this->comboBox1->TabIndex = 5;
-			this->comboBox1->SelectedIndex = 2;
+			this->comboBox1->SelectedIndex = 2; //App
 			// 
 			// comboBox2
 			// 
-			this->comboBox2->Font = (gcnew System::Drawing::Font(L"Consolas", 9));
+			this->comboBox2->Font = (gcnew System::Drawing::Font(L"Consolas", font120));
 			this->comboBox2->FormattingEnabled = true;
-			this->comboBox2->ItemHeight = 14;
 			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(10) {
 				L"ID", L"Family ID", L"App", L"Date", L"Location",
 					L"Severity",L"Service Name",L"Resource ID",L"Threat Name",L"Time Stamp"
 			});
-			this->comboBox2->Location = System::Drawing::Point(225, 4);
+			this->comboBox2->Location = System::Drawing::Point(5*treeWidth/8, 0);
 			this->comboBox2->Margin = System::Windows::Forms::Padding(0);
 			this->comboBox2->Name = L"comboBox2";
-			this->comboBox2->Size = System::Drawing::Size(100, 22);
+			this->comboBox2->Size = System::Drawing::Size(treeWidth / 4, menuHeight);
 			this->comboBox2->TabIndex = 6;
-			this->comboBox2->SelectedIndex = 0;
+			this->comboBox2->SelectedIndex = 0; //ID
 			// 
 			// textBox1
 			// 
-			this->textBox1->Dock = System::Windows::Forms::DockStyle::Bottom;
+			/*this->textBox1->Dock = System::Windows::Forms::DockStyle::Bottom;
 			this->textBox1->Location = System::Drawing::Point(0, 455);
 			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(364, 20);
-			this->textBox1->TabIndex = 1;
+			this->textBox1->Size = System::Drawing::Size(450, 20);
+			this->textBox1->TabIndex = 1;*/
 			// 
 			// treeView1
 			// 
-			this->treeView1->Font = (gcnew System::Drawing::Font(L"Consolas", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			Int32 font100 = scrHeight / 100;
+			this->treeView1->Font = (gcnew System::Drawing::Font(L"Consolas", font100, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->treeView1->HotTracking = true;
-			this->treeView1->Location = System::Drawing::Point(0, 29);
+			//this->treeView1->Dock = System::Windows::Forms::DockStyle::Right;
+			this->treeView1->Location = System::Drawing::Point(0, menuHeight);
 			this->treeView1->Margin = System::Windows::Forms::Padding(0);
 			this->treeView1->Name = L"treeView1";
-			this->treeView1->Size = System::Drawing::Size(364, 421);
+			this->treeView1->Size = System::Drawing::Size(treeWidth, winHeight-menuHeight);
 			this->treeView1->TabIndex = 0;
 			this->treeView1->AfterSelect += gcnew TreeViewEventHandler(this, &UI::treeView1_AfterSelect);
 			// 
 			// webBrowser1
 			// 
-			this->webBrowser1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->webBrowser1->Location = System::Drawing::Point(0, 0);
+			this->webBrowser1->Dock = System::Windows::Forms::DockStyle::Left;
+			this->webBrowser1->Location = System::Drawing::Point(0, menuHeight);
 			this->webBrowser1->MinimumSize = System::Drawing::Size(20, 20);
 			this->webBrowser1->Name = L"webBrowser1";
-			this->webBrowser1->Size = System::Drawing::Size(702, 475);
+			this->webBrowser1->Size = System::Drawing::Size(browserWidth, winHeight);
 			this->webBrowser1->TabIndex = 0;
 			// 
 			// UI
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleDimensions = System::Drawing::SizeF(5, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1070, 499);
+			this->ClientSize = System::Drawing::Size(winWidth, winHeight);
 			this->Controls->Add(this->splitContainer1);
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"UI";
-			this->Text = L"SophosHealth Trails";
-			this->Load += gcnew System::EventHandler(this, &UI::UI_Load);
+			this->Text = L"SophosHealth Trails" + scrHeight;
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
 			this->splitContainer1->Panel1->ResumeLayout(false);
@@ -297,7 +313,7 @@ namespace HealthTrail {
 
 		//Re-reads files to add any new events
 		private: System::Void refreshMenuItem_Click(Object^ sender, EventArgs^ e) {
-			sortItems(this->treeView1, this->comboBox1->SelectedItem->ToString(), HealthEvent::getFileString(this->comboBox2->SelectedItem->ToString()), this->trail);
+			refreshData(this->treeView1, this->comboBox1->SelectedItem->ToString(), HealthEvent::getFileString(this->comboBox2->SelectedItem->ToString()), this->trail);
 		}
 
 		//TreeNode Event Handler

@@ -29,7 +29,7 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 
 		//Child nodes are the elements in the value list
 		List< HealthEvent^ >^ subNodes = selectedTrailEnum.Current.Value;
-		subNodes = MergeSort(subNodes, sortBy2, (sortBy2 == "timeStamp" || sortBy2 == "date")); //inverse alphabetical for dates
+		//subNodes = MergeSort(subNodes, sortBy2, (sortBy2 == "timeStamp" || sortBy2 == "date")); //inverse alphabetical for dates
 
 		//Iterate subnode list
 		List< HealthEvent^ >::Enumerator subNodesEnum = subNodes->GetEnumerator();

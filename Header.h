@@ -100,6 +100,7 @@ private:
 				else if (n == 'T')			//T character seperates date and time 
 				{
 					createOrAdd(map, manageString("date"), manageString(buff));
+					buff += "  ";
 					//buffer is not clearered so date is still in timeStamp
 				}
 				else buff += n;
