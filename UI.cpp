@@ -21,8 +21,12 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 	Dictionary< String^, List< HealthEvent^ >^ >::Enumerator selectedTrailEnum = selectedTrail->GetEnumerator();
 	while (selectedTrailEnum.MoveNext())
 	{
+		String^ t1text = selectedTrailEnum.Current.Key;
+
+		if (t1text == "-") continue;
+
 		//Key of selected trail represents a top level Node in the TreeView
-		TreeNode^ t1Node = gcnew TreeNode(selectedTrailEnum.Current.Key);
+		TreeNode^ t1Node = gcnew TreeNode(t1text);
 		t1Node->Name = selectedTrailEnum.Current.Key; //name is the same as Text, for searching
 		tv1->Nodes->Add(t1Node);
 
@@ -37,6 +41,8 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 		while (subNodesEnum.MoveNext())
 		{
 			String^ t2text = subNodesEnum.Current->getFirstValue(sortBy2);
+
+			if (t2text == "-") continue;
 
 			//If tier2 nodes share a sortBy2 attribute, a third tier is created using ID, so must be unique.
 			if (t1Node->Nodes->ContainsKey(t2text))
@@ -53,6 +59,7 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 							//tier 2 node becomes empty parent, with child containing its old value
 							HealthEvent^ h = (HealthEvent^)((TreeNode^)ienum->Current)->Tag;
 							TreeNode^ pushDown = gcnew TreeNode(h->getFirstValue(manageString("id")));
+							pushDown->Tag = ((TreeNode^)ienum->Current)->Tag;
 							((TreeNode^)ienum->Current)->Nodes->Add(pushDown);
 							((TreeNode^)ienum->Current)->Tag = nullptr;
 						}

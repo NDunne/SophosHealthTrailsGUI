@@ -198,7 +198,7 @@ public:
 		try { 
 			return getValues(k)->ToArray()[0];
 		}
-		catch (...) { return "N/A"; }
+		catch (...) { return "-"; }
 	}
 
 	// return all values below parameter key String
