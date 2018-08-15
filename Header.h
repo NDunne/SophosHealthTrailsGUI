@@ -16,25 +16,28 @@ using namespace System::Collections::Generic;
 
 String^ manageString(std::string in);
 
-String^ userString(String^ in);
-
-String^ fileString(String^ in);
-
 ref class HealthEvent
 {
 private:
+	//JSON decomposition in to key:value pairs. Most values are a unary List
 	Dictionary< String^, List< String^ >^ >^ values;
+
+	//Static conversion tables from camelCase to pretty UserStrings
+	static Dictionary< String^, String^ >^ userString;
+	static Dictionary< String^, String^ >^ fileString;
 
 	//Creates new List under parameter key if first for that value, or adds to the existing List under the key
 	Dictionary< String^, List< String^ >^ >^ createOrAdd(Dictionary< String^, List< String^ >^ >^ map, String^ key, String^ val)
 	{
 		if (map->ContainsKey(key))
 		{
+			//Add under exisiting Key
 			List< String^ >^ list;
 			if (map->TryGetValue(key, list)) list->Add(val);
 		}
 		else
 		{
+			//Create new Key to add under
 			List< String^ >^ newList = gcnew List< String^ >(0);
 			newList->Add(val);
 			map->Add(key, newList);
@@ -45,6 +48,7 @@ private:
 	//Converts string JSON file into Managed Dictionary
 	Dictionary<String^, List<String^ >^ >^ explode(const string& s, Dictionary< String^, List< String^ >^ >^ map)
 	{
+		//read buffers
 		string buff{ "" };
 		string key{ "" };
 
@@ -70,11 +74,12 @@ private:
 			{
 				if (r == DATA || r == DATA_TIMESTAMP || r == LIST)
 				{
+					//End of data string so push value under key, or create if necessary
 					createOrAdd(map, manageString(key), manageString(buff));
 					buff = "";
 					if (r == DATA || r == DATA_TIMESTAMP)
 					{
-						key = "";
+						key = "";	//Clear key if not reading a list of values
 						r = KEY;
 					}
 
@@ -82,6 +87,7 @@ private:
 				}
 				else if (r = KEY)
 				{
+					//Just in case a key has a comma in it, but unlikely
 					buff += n;
 				}
 			}
@@ -108,19 +114,93 @@ private:
 	}
 
 public:
-	HealthEvent(string s)
+
+	static void initDicts()
 	{
-		setFromString(s);
+		userString = gcnew Dictionary< String^, String^ >(19);
+
+		//This could be done more data Driven: Capitalise 1st letter, push extra space upon reading a capital letter
+		//However Initiliasations like ID and SID would be harder to format so I did it like this and kept adding
+
+		userString->Add("id","ID");
+		userString->Add("familyId","Family ID");
+		userString->Add("timeStamp","Time Stamp");
+		userString->Add("app","App");
+		userString->Add("severity","Severity");
+		userString->Add("threatName","Threat Name");
+		userString->Add("location","Location");
+		userString->Add("date","Date");
+		userString->Add("serviceName","Service Name");
+		userString->Add("resourceId","Resource ID");
+		userString->Add("sequence", "Sequence");
+		userString->Add("showNotification", "Notification?");
+		userString->Add("updateSummary", "Update Summary?");
+		userString->Add("userName", "Username");
+		userString->Add("userSid", "User SID");
+		userString->Add("path", "Path");
+		userString->Add("reboot", "Reboot?");
+		userString->Add("origin", "Origin");
+		userString->Add("threatType", "Threat Type");
+		userString->Add("counterName", "Counter Name");
+
+
+		fileString = gcnew Dictionary< String^, String^ >(19);
+
+		fileString->Add("ID", "id");
+		fileString->Add("Family ID", "familyId");
+		fileString->Add("Time Stamp", "timeStamp");
+		fileString->Add("App", "app");
+		fileString->Add("Severity", "severity");
+		fileString->Add("Threat Name", "threatName");
+		fileString->Add("Location", "location");
+		fileString->Add("Date", "date");
+		fileString->Add("Service Name", "serviceName");
+		fileString->Add("Resource ID", "resourceId");
+		fileString->Add("Sequence", "sequence");
+		fileString->Add("Notification?", "showNotification");
+		fileString->Add("Update Summary?", "updateSummary");
+		fileString->Add("Username", "userName");
+		fileString->Add("User SID", "userSid");
+		fileString->Add("Path", "path");
+		fileString->Add("Reboot?", "reboot");
+		fileString->Add("Origin", "origin");
+		fileString->Add("Threat Type", "threatType");
+		fileString->Add("Counter Name", "counterName");
 	}
 
+	//Apply conversion table from file to user format, or return input string if not found
+	static String^ getUserString(String^ in)
+	{
+		String^ result;
+		if (userString->TryGetValue(in, result)) return result;
+		return in;
+	}
+
+	//Apply conversion table from user to file format, or return input string if not found
+	static String^ getFileString(String^ in)
+	{
+		String^ result;
+		if (fileString->TryGetValue(in, result)) return result;
+		return in;
+	}
+
+	//Constructor takes string from JSON and builds map from the string
+	HealthEvent(string s)
+	{
+		values = gcnew Dictionary< String^, List< String^ >^ >(0);
+		values = explode(s, values);
+	}
+
+	//Return only first value under key String. Some attributes like ID, app will always be able to use this
 	String^ getFirstValue(String^ k)
 	{
 		try { 
 			return getValues(k)->ToArray()[0];
 		}
-		catch (...) { return "unknown"; }
+		catch (...) { return "N/A"; }
 	}
 
+	// return all values below parameter key String
 	List< String^ >^ getValues(String^ k)
 	{
 			List< String^ >^ vList;
@@ -128,12 +208,7 @@ public:
 			return vList;
 	}
 
-	void setFromString(string s)
-	{
-		values = gcnew Dictionary< String^, List< String^ >^ >(0);
-		values = explode(s, values);
-	}
-
+	//Return slightly prettier string than input. Mostly for debugging purposes
 	String^ toString()
 	{
 		String^ buff = "";
@@ -154,17 +229,25 @@ public:
 		return buff;
 	}
 
+	//Return HTML for Output browser display
 	String^ toHTML()
 	{
-		String^ buff = "<html><body><h1>Event Data</h1><h2>ID</h2>";
+		//ID, APP, SEVERITY are constant, so will always bea t the top
+
+		String^ buff = "<html><body><h1>Event Data</h1><h2>ID</h2><ul><li>";
 		buff += getFirstValue("id");
+		buff += "</li></ul>";
 		
-		buff += "<h2>App</h2>";
+		buff += "<h2>App</h2><ul><li>";
 		buff += getFirstValue("app");
+		buff += "</li></ul>";
 
-		buff += "<h2>Severity</h2>";
+		buff += "<h2>Severity</h2><ul><li>";
 		buff += getFirstValue("severity");
+		buff += "</li></ul>";
 
+
+		//Then read rest of values from map in order
 		Dictionary< String^, List< String^ >^ >::Enumerator valEnum = values->GetEnumerator();
 		while (valEnum.MoveNext())
 		{
@@ -172,7 +255,7 @@ public:
 			if (k == "id" || k == "app" || k == "severity") continue;
 
 			buff += "<h2>";
-			buff += ::userString(k);
+			buff += getUserString(k);
 			buff += "</h2><ul>";
 			List< String^ >::Enumerator subEnum = valEnum.Current.Value->GetEnumerator();
 			while (subEnum.MoveNext())
@@ -189,6 +272,7 @@ public:
 		return buff;
 	}
 };
+
 Dictionary< String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ readFromFolder(string folder, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList);
 
 Dictionary< String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ readFile(string path, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList);

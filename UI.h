@@ -20,9 +20,10 @@ namespace HealthTrail {
 	public ref class UI : public System::Windows::Forms::Form
 	{
 	public:
-
+		//Load Data from file into 'trail' Dictionary
 		void refreshData(System::Windows::Forms::TreeView^ tv1, System::String^ sb1, System::String^ sb2, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail);
 
+		//Applys new groupings from drop down menus, re-allocates treeview Nodes. Does not re-read from file
 		void sortItems(System::Windows::Forms::TreeView ^ tv1, System::String^ sb1, System::String^ sb2, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail);
 
 		UI(void)
@@ -31,6 +32,7 @@ namespace HealthTrail {
 
 			Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail();
 
+			//Initial data read
 			refreshData(this->treeView1, "App", "id", this->trail);
 		}
 
@@ -288,17 +290,17 @@ namespace HealthTrail {
 		}
 		#pragma endregion
 
+		//Event Handler for Grouping button - resorts Nodes without re-reading files
 		private: System::Void GroupButtonClick(Object^ sender, EventArgs^ e) {
-			sortItems(this->treeView1, this->comboBox1->SelectedItem->ToString(), fileString(this->comboBox2->SelectedItem->ToString()), this->trail);
+			sortItems(this->treeView1, this->comboBox1->SelectedItem->ToString(), HealthEvent::getFileString(this->comboBox2->SelectedItem->ToString()), this->trail);
 		}
 
+		//Re-reads files to add any new events
 		private: System::Void refreshMenuItem_Click(Object^ sender, EventArgs^ e) {
-			sortItems(this->treeView1, this->comboBox1->SelectedItem->ToString(), fileString(this->comboBox2->SelectedItem->ToString()), this->trail);
+			sortItems(this->treeView1, this->comboBox1->SelectedItem->ToString(), HealthEvent::getFileString(this->comboBox2->SelectedItem->ToString()), this->trail);
 		}
 
-		private: System::Void splitter1_SplitterMoved(System::Object^  sender, System::Windows::Forms::SplitterEventArgs^  e) {
-		}
-
+		//TreeNode Event Handler
 		private: System::Void treeView1_AfterSelect(System::Object^  sender, System::Windows::Forms::TreeViewEventArgs^  e) {
 			try
 			{
@@ -306,23 +308,6 @@ namespace HealthTrail {
 				this->webBrowser1->DocumentText = attached->toHTML();
 			}
 			catch (...) {}
-		}
-
-		private: System::Void textBox1_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-		}
-		private: System::Void textBox1_TextChanged_1(System::Object^  sender, System::EventArgs^  e) {
-		}
-		private: System::Void tabPage1_Click(System::Object^  sender, System::EventArgs^  e) {
-		}
-		private: System::Void UI_Load(System::Object^  sender, System::EventArgs^  e) {
-		}
-		private: System::Void label1_Click(System::Object^  sender, System::EventArgs^  e) {
-		}
-		private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
-		}
-		private: System::Void label1_Click_1(System::Object^  sender, System::EventArgs^  e) {
-		}
-		private: System::Void label2_Click(System::Object^  sender, System::EventArgs^  e) {
 		}
 };
 }
