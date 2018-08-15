@@ -16,6 +16,10 @@ using namespace System::Collections::Generic;
 
 String^ manageString(std::string in);
 
+String^ userString(String^ in);
+
+String^ fileString(String^ in);
+
 ref class HealthEvent
 {
 private:
@@ -130,6 +134,60 @@ public:
 		values = explode(s, values);
 	}
 
+	String^ toString()
+	{
+		String^ buff = "";
+		Dictionary< String^, List< String^ >^ >::Enumerator valEnum = values->GetEnumerator();
+		while (valEnum.MoveNext())
+		{
+			buff += valEnum.Current.Key;
+			buff += ": ";
+			List< String^ >::Enumerator subEnum = valEnum.Current.Value->GetEnumerator();
+			while (subEnum.MoveNext())
+			{
+				buff += subEnum.Current;
+				buff += ", ";
+			}
+			buff += "| ";
+		}
+
+		return buff;
+	}
+
+	String^ toHTML()
+	{
+		String^ buff = "<html><body><h1>Event Data</h1><h2>ID</h2>";
+		buff += getFirstValue("id");
+		
+		buff += "<h2>App</h2>";
+		buff += getFirstValue("app");
+
+		buff += "<h2>Severity</h2>";
+		buff += getFirstValue("severity");
+
+		Dictionary< String^, List< String^ >^ >::Enumerator valEnum = values->GetEnumerator();
+		while (valEnum.MoveNext())
+		{
+			String^ k = valEnum.Current.Key;
+			if (k == "id" || k == "app" || k == "severity") continue;
+
+			buff += "<h2>";
+			buff += ::userString(k);
+			buff += "</h2><ul>";
+			List< String^ >::Enumerator subEnum = valEnum.Current.Value->GetEnumerator();
+			while (subEnum.MoveNext())
+			{
+				buff += "<li>";
+				buff += subEnum.Current;
+				buff += "</li>";
+			}
+			buff += "</ul>" ;
+		}
+
+		buff += "</body></html>";
+
+		return buff;
+	}
 };
 Dictionary< String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ readFromFolder(string folder, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList);
 

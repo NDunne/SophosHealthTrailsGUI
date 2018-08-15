@@ -96,3 +96,33 @@ Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^  readFromFo
 
 	return eventList;
 }
+
+String^ userString(String^ in)
+{
+	if (in == "id") return "ID";
+	else if (in == "familyId") return "Family ID";
+	else if (in == "timeStamp") return "Time Stamp";
+	else if (in == "app") return "App";
+	else if (in == "severity") return "Severity";
+	else if (in == "threatName") return "Threat Name";
+	else if (in == "location") return "Location";
+	else if (in == "date") return "Date";
+	else if (in == "serviceName") return "Service Name";
+	else if (in == "resourceId") return "Resource ID";
+	else return in;
+}
+
+String^ fileString(String^ in)
+{
+	if (in == "ID") return "id";
+	else if (in == "Family ID") return "familyId";
+	else if (in == "Time Stamp") return "timeStamp";
+	else if (in == "App") return "app";
+	else if (in == "Severity") return "severity";
+	else if (in == "Threat Name") return "threatName";
+	else if (in == "Location") return "Location";
+	else if (in == "Date") return "date";
+	else if (in == "Service Name") return "serviceName";
+	else if (in == "Resource ID") return "resourceId";
+	else return in;
+}

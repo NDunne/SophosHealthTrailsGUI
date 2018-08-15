@@ -13,39 +13,7 @@ namespace HealthTrail {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
-
-	String^ userString(String^ in)
-	{
-		if (in == "id") return "ID";
-		else if (in == "familyId") return "Family ID";
-		else if (in == "timeStamp") return "Time Stamp";
-		else if (in == "app") return "App";
-		else if (in == "severity") return "Severity";
-		else if (in == "threatName") return "Threat Name";
-		else if (in == "location") return "Location";
-		else if (in == "date") return "Date";
-		else if (in == "serviceName") return "Service Name";
-		else if (in == "resourceId") return "Resource ID";
-		else return in;
-	}
-
-	String^ fileString(String^ in)
-	{
-		if (in == "ID") return "id";
-		else if (in == "Family ID") return "familyId";
-		else if (in == "Time Stamp") return "timeStamp";
-		else if (in == "App") return "app";
-		else if (in == "Severity") return "severity";
-		else if (in == "Threat Name") return "threatName";
-		else if (in == "Location") return "Location";
-		else if (in == "Date") return "date";
-		else if (in == "Service Name") return "serviceName";
-		else if (in == "Resource ID") return "resourceId";
-		else return in;
-	}
-
-
-
+	
 	/// <summary>
 	/// Main Body UI form
 	/// </summary>
@@ -101,9 +69,6 @@ namespace HealthTrail {
 	private:
 		Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail;
 
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
@@ -217,7 +182,6 @@ namespace HealthTrail {
 			this->label2->Size = System::Drawing::Size(42, 14);
 			this->label2->TabIndex = 9;
 			this->label2->Text = L"Then:";
-			this->label2->Click += gcnew System::EventHandler(this, &UI::label2_Click);
 			// 
 			// label1
 			// 
@@ -229,7 +193,6 @@ namespace HealthTrail {
 			this->label1->Size = System::Drawing::Size(70, 14);
 			this->label1->TabIndex = 8;
 			this->label1->Text = L"Group By:";
-			this->label1->Click += gcnew System::EventHandler(this, &UI::label1_Click_1);
 			// 
 			// Submit
 			// 
@@ -290,7 +253,7 @@ namespace HealthTrail {
 			this->treeView1->Name = L"treeView1";
 			this->treeView1->Size = System::Drawing::Size(364, 421);
 			this->treeView1->TabIndex = 0;
-			this->treeView1->Click += gcnew System::EventHandler(this, &UI::treeView1_Click);
+			this->treeView1->AfterSelect += gcnew TreeViewEventHandler(this, &UI::treeView1_AfterSelect);
 			// 
 			// webBrowser1
 			// 
@@ -325,14 +288,11 @@ namespace HealthTrail {
 		}
 		#pragma endregion
 
-		private: void GroupButtonClick(Object^ sender, EventArgs^ e) {
+		private: System::Void GroupButtonClick(Object^ sender, EventArgs^ e) {
 			sortItems(this->treeView1, this->comboBox1->SelectedItem->ToString(), fileString(this->comboBox2->SelectedItem->ToString()), this->trail);
 		}
 
-		private: void treeView1_Click(Object^ sender, EventArgs^ e) {
-		}
-
-		private: void refreshMenuItem_Click(Object^ sender, EventArgs^ e) {
+		private: System::Void refreshMenuItem_Click(Object^ sender, EventArgs^ e) {
 			sortItems(this->treeView1, this->comboBox1->SelectedItem->ToString(), fileString(this->comboBox2->SelectedItem->ToString()), this->trail);
 		}
 
@@ -340,6 +300,12 @@ namespace HealthTrail {
 		}
 
 		private: System::Void treeView1_AfterSelect(System::Object^  sender, System::Windows::Forms::TreeViewEventArgs^  e) {
+			try
+			{
+				HealthEvent^ attached = (HealthEvent^)((TreeView^)sender)->SelectedNode->Tag;
+				this->webBrowser1->DocumentText = attached->toHTML();
+			}
+			catch (...) {}
 		}
 
 		private: System::Void textBox1_TextChanged(System::Object^  sender, System::EventArgs^  e) {

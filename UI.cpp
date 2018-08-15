@@ -47,7 +47,7 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 							HealthEvent^ h = (HealthEvent^)((TreeNode^)ienum->Current)->Tag;
 							TreeNode^ pushDown = gcnew TreeNode(h->getFirstValue(manageString("id")));
 							((TreeNode^)ienum->Current)->Nodes->Add(pushDown);
-							((TreeNode^)ienum->Current)->Tag = NULL;
+							((TreeNode^)ienum->Current)->Tag = nullptr;
 						}
 						catch (...) {}
 					}
