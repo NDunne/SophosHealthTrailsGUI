@@ -27,18 +27,18 @@ Dictionary< String^, List< HealthEvent^ >^ >^ addHealthEvent(Dictionary< String^
 }
 
 //Add a health event to the right Dictionary of String : HealthEvent List based on which attribute it is stored by. Add if doesn't exist already
-Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ createAndAdd(Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList, string userKey, String^ fileKey, HealthEvent^ h)
+Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ createAndAdd(Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList, String^ userKey, String^ fileKey, HealthEvent^ h)
 {
 	//Key here is the User Formated attribute name that the value is indexing by
 	//Value is a dictionary mapping attriubute values for the attribute in the key to a List of HealthEvents sharing that value
 
 	Dictionary< String^, List< HealthEvent^ >^ >^ eventSingle = gcnew Dictionary< String^, List< HealthEvent^ >^ >(0);
-	if (eventList->TryGetValue(manageString(userKey), eventSingle)) addHealthEvent(eventSingle, h->getFirstValue(fileKey), h);
+	if (eventList->TryGetValue(userKey, eventSingle)) addHealthEvent(eventSingle, h->getFirstValue(fileKey), h);
 	else
 	{
 		Dictionary< String^, List< HealthEvent^ >^ >^ eventSingle = gcnew Dictionary< String^, List< HealthEvent^ >^ >(0);
 		addHealthEvent(eventSingle, h->getFirstValue(fileKey), h);
-		eventList->Add(manageString(userKey), eventSingle);
+		eventList->Add(userKey, eventSingle);
 	}
 	return eventList;
 }
@@ -66,9 +66,13 @@ Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ readFile(st
 			f.close();
 
 			//Same HealthEvent pointer is stored multiple times to allow quicker re-sorting
-			string attributes[] = { "ID", "Family ID", "Time Stamp", "App", "Severity", "Threat Name", "Location", "Date", "Service Name", "Resource ID"};
-			for (auto a : attributes)
-				createAndAdd(eventList, a, HealthEvent::getFileString(manageString(a)), h);
+
+			List < String^ >::Enumerator keys = HealthEvent::sortableAttributes()->GetEnumerator();
+			while (keys.MoveNext())
+			{
+				String^ k = keys.Current;
+				createAndAdd(eventList, k, HealthEvent::getFileString(k), h);
+			}
 		}
 
 		if (f.is_open()) f.close();

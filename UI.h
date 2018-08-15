@@ -241,6 +241,11 @@ namespace HealthTrail {
 			// 
 			this->comboBox2->Font = (gcnew System::Drawing::Font(L"Consolas", font120));
 			this->comboBox2->FormattingEnabled = true;
+			
+			//--TODO-- Have this list defined by static list in HealthEvent
+			
+			
+			
 			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(10) {
 				L"ID", L"Family ID", L"App", L"Date", L"Location",
 					L"Severity",L"Service Name",L"Resource ID",L"Threat Name",L"Time Stamp"
@@ -292,7 +297,7 @@ namespace HealthTrail {
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"UI";
-			this->Text = L"SophosHealth Trails" + scrHeight;
+			this->Text = L"SophosHealth Trails";
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
 			this->splitContainer1->Panel1->ResumeLayout(false);

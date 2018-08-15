@@ -146,27 +146,13 @@ public:
 
 
 		fileString = gcnew Dictionary< String^, String^ >(19);
+		Dictionary< String^, String^ >::Enumerator mirror = userString->GetEnumerator();
 
-		fileString->Add("ID", "id");
-		fileString->Add("Family ID", "familyId");
-		fileString->Add("Time Stamp", "timeStamp");
-		fileString->Add("App", "app");
-		fileString->Add("Severity", "severity");
-		fileString->Add("Threat Name", "threatName");
-		fileString->Add("Location", "location");
-		fileString->Add("Date", "date");
-		fileString->Add("Service Name", "serviceName");
-		fileString->Add("Resource ID", "resourceId");
-		fileString->Add("Sequence", "sequence");
-		fileString->Add("Notification?", "showNotification");
-		fileString->Add("Update Summary?", "updateSummary");
-		fileString->Add("Username", "userName");
-		fileString->Add("User SID", "userSid");
-		fileString->Add("Path", "path");
-		fileString->Add("Reboot?", "reboot");
-		fileString->Add("Origin", "origin");
-		fileString->Add("Threat Type", "threatType");
-		fileString->Add("Counter Name", "counterName");
+		while (mirror.MoveNext())
+		{
+			fileString->Add(mirror.Current.Value, mirror.Current.Key);
+		}
+		
 	}
 
 	//Apply conversion table from file to user format, or return input string if not found
@@ -183,6 +169,28 @@ public:
 		String^ result;
 		if (fileString->TryGetValue(in, result)) return result;
 		return in;
+	}
+
+	static List < String^ >^ sortableAttributes()
+	{
+		List < String^ >^ attr = gcnew List< String^ >(15);
+		attr->Add("ID");
+		attr->Add("Family ID");
+		attr->Add("Time Stamp");
+		attr->Add("App");
+		attr->Add("Severity");
+		attr->Add("Threat Name");
+		attr->Add("Location");
+		attr->Add("Date");
+		attr->Add("Service Name");
+		attr->Add("Resource ID");
+		attr->Add("Sequence");
+		attr->Add("Username");
+		attr->Add("User SID");
+		attr->Add("Path");
+		attr->Add("Threat Type");
+
+		return attr;
 	}
 
 	//Constructor takes string from JSON and builds map from the string
