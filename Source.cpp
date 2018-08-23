@@ -1,7 +1,7 @@
 //TODO
 // - Parent nodes display table
 // - Child nodes prettier
-// - 
+// - Same number of levels for all nodes
 
 #include "Header.h"
 
