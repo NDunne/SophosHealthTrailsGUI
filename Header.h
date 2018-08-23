@@ -8,9 +8,8 @@
 #include <stdio.h>
 #include <map>
 #include <algorithm>
+#include <msclr\marshal_cppstd.h>
 
-
-using namespace std;
 using namespace System;
 using namespace System::Collections::Generic;
 
@@ -46,11 +45,11 @@ private:
 	}
 
 	//Converts string JSON file into Managed Dictionary
-	Dictionary<String^, List<String^ >^ >^ explode(const string& s, Dictionary< String^, List< String^ >^ >^ map)
+	Dictionary<String^, List<String^ >^ >^ explode(const std::string& s, Dictionary< String^, List< String^ >^ >^ map)
 	{
 		//read buffers
-		string buff{ "" };
-		string key{ "" };
+		std::string buff{ "" };
+		std::string key{ "" };
 
 		//track what data is being read
 		enum readingState { KEY, DATA, DATA_TIMESTAMP, LIST };
@@ -194,7 +193,7 @@ public:
 	}
 
 	//Constructor takes string from JSON and builds map from the string
-	HealthEvent(string s)
+	HealthEvent(std::string s)
 	{
 		values = gcnew Dictionary< String^, List< String^ >^ >(0);
 		values = explode(s, values);
@@ -282,6 +281,6 @@ public:
 	}
 };
 
-Dictionary< String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ readFromFolder(string folder, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList);
+Dictionary< String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ readFromFolder(String^ folder, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList);
 
-Dictionary< String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ readFile(string path, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList);
+Dictionary< String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ readFile(std::string path, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList);

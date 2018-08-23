@@ -2,7 +2,7 @@
 
 !*.cpp
 !*.h
-!*.png
+!*.bat
 
 !*HealthTrailsProj.exe
 !*HealthTrailsProj.pdb

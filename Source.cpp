@@ -58,7 +58,7 @@ Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ readFile(st
 		}
 		else
 		{
-			std::string s((istreambuf_iterator<char>(f.rdbuf())), istreambuf_iterator<char>());
+			std::string s((std::istreambuf_iterator<char>(f.rdbuf())), std::istreambuf_iterator<char>());
 
 			HealthEvent^ h;
 			h = gcnew HealthEvent(s);
@@ -82,11 +82,11 @@ Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ readFile(st
 }
 
 //find all filenames in given filepath
-Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^  readFromFolder(string folder, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList)
+Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^  readFromFolder(String^ folder, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ eventList)
 {
 	WIN32_FIND_DATA fd;
-	std::string search_path = folder + "/*.*";
-	HANDLE hFind = ::FindFirstFile(search_path.c_str(), &fd);
+	String^ search_path = folder + "/*.*";
+	HANDLE hFind = ::FindFirstFile(msclr::interop::marshal_as<std::string>(search_path).c_str(), &fd);
 
 	if (hFind != INVALID_HANDLE_VALUE) {
 		do {
@@ -94,7 +94,7 @@ Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^  readFromFo
 			if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
 				char* filename = fd.cFileName;
-				std::string path = folder + "/" + filename; //full path passed to Object creator
+				string path = msclr::interop::marshal_as<std::string>(folder) + "/" + filename; //full path passed to Object creator
 				eventList = readFile(path, eventList); //JSON data from file added to eventList Dictionary
 			}
 		} while (::FindNextFile(hFind, &fd));

@@ -26,8 +26,9 @@ namespace HealthTrail {
 		//Applys new groupings from drop down menus, re-allocates treeview Nodes. Does not re-read from file
 		void sortItems(System::Windows::Forms::TreeView ^ tv1, System::String^ sb1, System::String^ sb2, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail);
 
-		UI(void)
+		UI(String^path)
 		{
+			this->path = path;
 			InitializeComponent();
 
 			Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail();
@@ -57,7 +58,6 @@ namespace HealthTrail {
 
 	private: System::Windows::Forms::SplitContainer^  splitContainer1;
 	public: System::Windows::Forms::TreeView^  treeView1;
-	//private: System::Windows::Forms::TextBox^  textBox1;
 	private: System::Windows::Forms::WebBrowser^  webBrowser1;
 
 	private: System::Windows::Forms::Button^  Submit;
@@ -70,6 +70,7 @@ namespace HealthTrail {
 
 	private:
 		Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail;
+		String^ path;
 
 		System::ComponentModel::Container ^components;
 
@@ -297,7 +298,7 @@ namespace HealthTrail {
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"UI";
-			this->Text = L"SophosHealth Trails";
+			this->Text = L"SophosHealth Trails: " + path;
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
 			this->splitContainer1->Panel1->ResumeLayout(false);

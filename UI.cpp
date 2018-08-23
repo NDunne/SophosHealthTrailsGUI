@@ -88,7 +88,7 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView^ tv1, System::String^ sb1, System::String^ sb2, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail)
 {	
 	//Real
-	trail = readFromFolder("C:/ProgramData/Sophos/Health/Event Store/Trail", trail);
+	trail = readFromFolder(UI::path, trail);
 
 	//Home
 	//trail = ::readFromFolder("C:/Users/Nathan/Desktop/TestJson", trail); 
@@ -99,17 +99,33 @@ void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView^ tv1, System:
 	sortItems(tv1, sb1, sb2, trail);
 }
 
-[STAThreadAttribute]
-int main()
+[STAThreadAttribute()]
+int CALLBACK WinMain(
+	_In_ HINSTANCE hInstance,
+	_In_ HINSTANCE hPrevInstance,
+	_In_ LPSTR     lpCmdLine,
+	_In_ int       nCmdShow
+)
 {
 	HealthEvent::initDicts(); //Create Conversion table maps
 
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
 
-	HealthTrail::UI ui;
+
+	String^ cmd = manageString(lpCmdLine);
+	String^ path = "C:/ProgramData/Sophos/Health/Event Store/Trail";
+
+	if (cmd != "") path = cmd;
+
+	if (path->EndsWith("sdulog"))
+	{
+		path += "/ProgramData/Sophos/Health/Event Store/Trail";
+	}
+
+	HealthTrail::UI ui(path);
 
 	Application::Run(%ui);
-
+	
 	return 0;
 }
