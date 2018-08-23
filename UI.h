@@ -227,10 +227,8 @@ namespace HealthTrail {
 			// 
 			this->comboBox1->Font = (gcnew System::Drawing::Font(L"Consolas", font120));
 			this->comboBox1->FormattingEnabled = true;
-			this->comboBox1->Items->AddRange(gcnew cli::array< System::Object^  >(10) {
-				L"ID", L"Family ID", L"App", L"Date", L"Location",
-					L"Severity", L"Service Name", L"Resource ID", L"Threat Name", L"Time Stamp"
-			});
+			List< String^ >^ attr = HealthEvent::sortableAttributes();
+			this->comboBox1->Items->AddRange(attr->ToArray());
 			this->comboBox1->Location = System::Drawing::Point(treeWidth/4, 0);
 			this->comboBox1->Margin = System::Windows::Forms::Padding(0);
 			this->comboBox1->Name = L"comboBox1";
@@ -244,13 +242,7 @@ namespace HealthTrail {
 			this->comboBox2->FormattingEnabled = true;
 			
 			//--TODO-- Have this list defined by static list in HealthEvent
-			
-			
-			
-			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(10) {
-				L"ID", L"Family ID", L"App", L"Date", L"Location",
-					L"Severity",L"Service Name",L"Resource ID",L"Threat Name",L"Time Stamp"
-			});
+			this->comboBox2->Items->AddRange(attr->ToArray());
 			this->comboBox2->Location = System::Drawing::Point(5*treeWidth/8, 0);
 			this->comboBox2->Margin = System::Windows::Forms::Padding(0);
 			this->comboBox2->Name = L"comboBox2";

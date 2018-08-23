@@ -87,14 +87,7 @@ void HealthTrail::UI::sortItems(System::Windows::Forms::TreeView ^ tv1, System::
 
 void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView^ tv1, System::String^ sb1, System::String^ sb2, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail)
 {	
-	//Real
 	trail = readFromFolder(UI::path, trail);
-
-	//Home
-	//trail = ::readFromFolder("C:/Users/Nathan/Desktop/TestJson", trail); 
-	
-	//Work
-	//trail = ::readFromFolder("C:/Users/nathandunne/Desktop/TestJson", trail);
 
 	sortItems(tv1, sb1, sb2, trail);
 }
