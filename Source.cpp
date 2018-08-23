@@ -1,3 +1,8 @@
+//TODO
+// - Parent nodes display table
+// - Child nodes prettier
+// - 
+
 #include "Header.h"
 
 using std::vector;

@@ -234,7 +234,7 @@ namespace HealthTrail {
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(treeWidth / 4, menuHeight);
 			this->comboBox1->TabIndex = 5;
-			this->comboBox1->SelectedIndex = 2; //App
+			this->comboBox1->SelectedIndex = 3; //App
 			// 
 			// comboBox2
 			// 
