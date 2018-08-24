@@ -1,7 +1,7 @@
 //TODO
 // - Parent nodes display table
-// - Child nodes prettier
-// - Same number of levels for all nodes
+// - Child nodes prettier display
+// - Empty T1 Nodes?
 
 #include "Header.h"
 
