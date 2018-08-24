@@ -89,7 +89,7 @@ namespace HealthTrail {
 			Int32 scrHeight = GetSystemMetrics(SM_CYSCREEN);
 
 			Int32 treeWidth = 7 * scrHeight / 24;
-			Int32 browserWidth = scrHeight / 3;
+			Int32 browserWidth = 2*scrHeight / 3;
 
 			Int32 winWidth = treeWidth + browserWidth;
 			Int32 winHeight = scrHeight / 2;
@@ -106,7 +106,6 @@ namespace HealthTrail {
 			this->Submit = (gcnew System::Windows::Forms::Button());
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->comboBox2 = (gcnew System::Windows::Forms::ComboBox());
-			//this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->treeView1 = (gcnew System::Windows::Forms::TreeView());
 			this->webBrowser1 = (gcnew System::Windows::Forms::WebBrowser());
 			this->menuStrip1->SuspendLayout();
@@ -174,6 +173,8 @@ namespace HealthTrail {
 			// 
 			// splitContainer1.Panel1
 			// 
+			this->splitContainer1->FixedPanel = FixedPanel::Panel1;
+			this->splitContainer1->Panel1MinSize = treeWidth;
 			this->splitContainer1->Panel1->Controls->Add(this->comboBox1);
 			this->splitContainer1->Panel1->Controls->Add(this->comboBox2);
 			this->splitContainer1->Panel1->Controls->Add(this->label1);
@@ -267,7 +268,7 @@ namespace HealthTrail {
 			this->treeView1->Font = (gcnew System::Drawing::Font(L"Consolas", font100, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->treeView1->HotTracking = true;
-			//this->treeView1->Dock = System::Windows::Forms::DockStyle::Right;
+			this->treeView1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->treeView1->Location = System::Drawing::Point(0, menuHeight);
 			this->treeView1->Margin = System::Windows::Forms::Padding(0);
 			this->treeView1->Name = L"treeView1";
@@ -277,7 +278,7 @@ namespace HealthTrail {
 			// 
 			// webBrowser1
 			// 
-			this->webBrowser1->Dock = System::Windows::Forms::DockStyle::Left;
+			this->webBrowser1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->webBrowser1->Location = System::Drawing::Point(0, menuHeight);
 			this->webBrowser1->MinimumSize = System::Drawing::Size(20, 20);
 			this->webBrowser1->Name = L"webBrowser1";

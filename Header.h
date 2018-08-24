@@ -74,7 +74,8 @@ private:
 				if (r == DATA || r == DATA_TIMESTAMP || r == LIST)
 				{
 					//End of data string so push value under key, or create if necessary
-					createOrAdd(map, manageString(key), manageString(buff));
+					if (key == "id") createOrAdd(map, manageString(key), manageString(buff)->ToUpper());
+					else createOrAdd(map, manageString(key), manageString(buff));
 					buff = "";
 					if (r == DATA || r == DATA_TIMESTAMP)
 					{
