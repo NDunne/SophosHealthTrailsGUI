@@ -1,6 +1,5 @@
 //TODO
-// - Parent nodes display table
-// - Child nodes prettier display
+// - Prettier Output
 // - Empty T1 Nodes?
 
 #include "Header.h"

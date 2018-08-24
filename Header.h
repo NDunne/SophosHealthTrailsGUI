@@ -237,6 +237,46 @@ public:
 		return buff;
 	}
 
+	String^ toHTMLRow(String^ _sb1, String^ _sb2)
+	{
+		String^ sb1 = getFileString(_sb1);
+		String^ sb2 = getFileString(_sb2);
+
+		String^ buff = "<tr><td>";
+
+		buff += getFirstValue(sb1);
+		buff += "</td>";
+
+		if (sb1 != "id")
+		{
+			buff += "<td>";
+			buff += getFirstValue(sb2);
+			buff += "</td>";
+			if (sb2 != "id")
+			{
+				buff += "<td>";
+				buff += getFirstValue("id");
+				buff += "</td>";
+			}
+		}
+
+		List< String^ >^ attr = HealthEvent::sortableAttributes();
+		List< String^ >::Enumerator attrEnum = attr->GetEnumerator();
+
+		while (attrEnum.MoveNext())
+		{
+			if (attrEnum.Current != "ID" && attrEnum.Current != _sb1 && attrEnum.Current != _sb2)
+			{
+				buff += "<td>";
+				buff += getFirstValue(getFileString(attrEnum.Current));
+				buff += "</td>";
+			}
+		}
+
+		buff += "</tr>";
+		return buff;
+	}
+
 	//Return HTML for Output browser display
 	String^ toHTML()
 	{

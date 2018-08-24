@@ -26,6 +26,9 @@ namespace HealthTrail {
 		//Applys new groupings from drop down menus, re-allocates treeview Nodes. Does not re-read from file
 		void sortItems(System::Windows::Forms::TreeView ^ tv1, System::String^ sb1, System::String^ sb2, Dictionary<String^, Dictionary< String^, List< HealthEvent^ >^ >^ >^ trail);
 
+		//Return HTML format for a set of Nodes in a Table
+		String^ toTable(TreeNodeCollection^ t, System::String^ sb1, System::String^ sb2);
+		
 		UI(String^path)
 		{
 			this->path = path;
@@ -321,7 +324,9 @@ namespace HealthTrail {
 				HealthEvent^ attached = (HealthEvent^)((TreeView^)sender)->SelectedNode->Tag;
 				this->webBrowser1->DocumentText = attached->toHTML();
 			}
-			catch (...) {}
+			catch (System::NullReferenceException^ e) {
+				this->webBrowser1->DocumentText = toTable(((TreeView^)sender)->SelectedNode->Nodes, this->comboBox1->SelectedItem->ToString(), HealthEvent::getFileString(this->comboBox2->SelectedItem->ToString()));
+			}
 		}
-};
+	};
 }

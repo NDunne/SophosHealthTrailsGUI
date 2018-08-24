@@ -100,6 +100,54 @@ void HealthTrail::UI::refreshData(System::Windows::Forms::TreeView^ tv1, System:
 	sortItems(tv1, sb1, sb2, trail);
 }
 
+String^ HealthTrail::UI::toTable(TreeNodeCollection^ t, System::String^ _sb1, System::String^ _sb2)
+{
+	String^ sb1 = _sb1;
+	String^ sb2 = HealthEvent::getUserString(_sb2);
+	
+	String^ buff = "<html><body><h1>Event Data</h1><table><tr><td><b>";
+
+	buff += sb1;
+	buff += "</b></td>";
+
+	if (sb1 != "ID")
+	{
+		buff += "<td><b>";
+		buff += sb2;
+		buff += "</b></td>";
+		if (sb2 != "ID")
+		{
+			buff += "<td><b>";
+			buff += "ID";
+			buff += "</b></td>";
+		}
+	}
+
+	List< String^ >^ attr = HealthEvent::sortableAttributes();
+	List< String^ >::Enumerator attrEnum = attr->GetEnumerator();
+
+	while (attrEnum.MoveNext())
+	{
+		if (attrEnum.Current != "ID" && attrEnum.Current != sb1 && attrEnum.Current != sb2)
+		{
+			buff += "<td><b>";
+			buff += attrEnum.Current;
+			buff += "</b></td>";
+		}
+	}
+	buff += "</tr><tr>";
+	System::Collections::IEnumerator^ nodeEnum = t->GetEnumerator();
+
+	while (nodeEnum->MoveNext())
+	{
+		buff += ((HealthEvent^)(((TreeNode^)(nodeEnum->Current))->Tag))->toHTMLRow(sb1,sb2);
+	}
+	
+	buff += "</tr></table></html>";
+
+	return buff;
+}
+
 [STAThreadAttribute()]
 int CALLBACK WinMain(
 	_In_ HINSTANCE hInstance,
