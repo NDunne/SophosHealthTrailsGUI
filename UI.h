@@ -180,7 +180,6 @@ namespace HealthTrail {
 			this->splitContainer1->Panel1->Controls->Add(this->label1);
 			this->splitContainer1->Panel1->Controls->Add(this->label2);
 			this->splitContainer1->Panel1->Controls->Add(this->Submit);
-			//this->splitContainer1->Panel1->Controls->Add(this->textBox1);
 			this->splitContainer1->Panel1->Controls->Add(this->treeView1);
 			// 
 			// splitContainer1.Panel2
@@ -268,11 +267,11 @@ namespace HealthTrail {
 			this->treeView1->Font = (gcnew System::Drawing::Font(L"Consolas", font100, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->treeView1->HotTracking = true;
-			this->treeView1->Dock = System::Windows::Forms::DockStyle::Fill;
+			//this->treeView1->Dock = System::Windows::Forms::DockStyle::Bottom;
 			this->treeView1->Location = System::Drawing::Point(0, menuHeight);
 			this->treeView1->Margin = System::Windows::Forms::Padding(0);
 			this->treeView1->Name = L"treeView1";
-			this->treeView1->Size = System::Drawing::Size(treeWidth, winHeight-menuHeight);
+			this->treeView1->Size = System::Drawing::Size(treeWidth, winHeight-(2*menuHeight));
 			this->treeView1->TabIndex = 0;
 			this->treeView1->AfterSelect += gcnew TreeViewEventHandler(this, &UI::treeView1_AfterSelect);
 			// 
@@ -287,8 +286,8 @@ namespace HealthTrail {
 			// 
 			// UI
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(5, 12);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			//this->AutoScaleDimensions = System::Drawing::SizeF(5, 12);
+			//this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(winWidth, winHeight);
 			this->Controls->Add(this->splitContainer1);
 			this->Controls->Add(this->menuStrip1);
